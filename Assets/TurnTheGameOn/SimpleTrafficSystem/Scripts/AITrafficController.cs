@@ -21,6 +21,7 @@
         private bool isInitialized;
         [Header("Detection Sensor")]
         public LayerMask layerMask;
+        public LayerMask layerMaskMycar;
         public Vector3 frontSensorSize = new Vector3(1.01f, 1f, 0.001f);
         public float frontSensorLength = 5f;
         public Vector3 sideSensorSize = new Vector3(1.01f, 1f, 0.001f);
@@ -283,6 +284,15 @@
                                 frontRotationList[i],
                                 frontSensorLength,
                                 layerMask,
+                                QueryTriggerInteraction.UseGlobal)
+                                || Physics.BoxCast(
+                                frontOriginList[i],
+                                frontSensorSize,
+                                frontDirectionList[i],
+                                out boxHit,
+                                frontRotationList[i],
+                                frontSensorLength,
+                                layerMaskMycar,
                                 QueryTriggerInteraction.UseGlobal))
                             {
                                 frontHitTransform[i] = boxHit.transform; // cache transform lookup
@@ -331,6 +341,15 @@
                                             leftRotationList[i],
                                             sideSensorLength,
                                             layerMask,
+                                            QueryTriggerInteraction.UseGlobal)
+                                            || Physics.BoxCast(
+                                            leftOriginList[i],
+                                            sideSensorSize,
+                                            leftDirectionList[i],
+                                            out boxHit,
+                                            leftRotationList[i],
+                                            sideSensorLength,
+                                            layerMaskMycar,
                                             QueryTriggerInteraction.UseGlobal))
                                         {
                                             leftHitTransform[i] = boxHit.transform; // cache transform lookup
@@ -361,6 +380,15 @@
                                             rightRotationList[i],
                                             sideSensorLength,
                                             layerMask,
+                                            QueryTriggerInteraction.UseGlobal)
+                                            || Physics.BoxCast(
+                                            rightOriginList[i],
+                                            sideSensorSize,
+                                            rightDirectionList[i],
+                                            out boxHit,
+                                            rightRotationList[i],
+                                            sideSensorLength,
+                                            layerMaskMycar,
                                             QueryTriggerInteraction.UseGlobal))
                                         {
                                             rightHitTransform[i] = boxHit.transform; // cache transform lookup
@@ -951,6 +979,15 @@
                                 leftRotationList[i],
                                 sideSensorLength,
                                 layerMask,
+                                QueryTriggerInteraction.UseGlobal)
+                                || Physics.BoxCast(
+                                leftOriginList[i],
+                                sideSensorSize,
+                                leftDirectionList[i],
+                                out boxHit,
+                                leftRotationList[i],
+                                sideSensorLength,
+                                layerMaskMycar,
                                 QueryTriggerInteraction.UseGlobal))
                             {
                                 leftHitTransform[i] = boxHit.transform; // cache transform lookup
@@ -981,6 +1018,15 @@
                                 rightRotationList[i],
                                 sideSensorLength,
                                 layerMask,
+                                QueryTriggerInteraction.UseGlobal)
+                                || Physics.BoxCast(
+                                rightOriginList[i],
+                                sideSensorSize,
+                                rightDirectionList[i],
+                                out boxHit,
+                                rightRotationList[i],
+                                sideSensorLength,
+                                layerMaskMycar,
                                 QueryTriggerInteraction.UseGlobal))
                             {
                                 rightHitTransform[i] = boxHit.transform; // cache transform lookup
