@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4239359944006400}
   - component: {fileID: 33395801938675708}
   - component: {fileID: 23158377618603606}
+  - component: {fileID: 3104750232788192302}
   m_Layer: 0
   m_Name: SM_Env_Hedge_01 1
   m_TagString: Untagged
@@ -85,3 +86,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &3104750232788192302
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1775191655114454}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.8290346, y: 1.7530389, z: 1.0091299}
+  m_Center: {x: 0, y: 0.87651944, z: 0}
