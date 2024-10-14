@@ -69,6 +69,8 @@ public class MyCarController : MonoBehaviour
     public CarVFX carVFX;
     public PowerUps powerUps;
 
+    public float forceCar = 1;
+
     private void Awake()
     {
         _maxSpeed = maxSpeed;
@@ -184,7 +186,8 @@ public class MyCarController : MonoBehaviour
 
         Vector3 forward = transform.forward * currentSpeed * Time.deltaTime;        
         //transform.position += forward;
-        myRigidbody.MovePosition(transform.position + forward);
+        // myRigidbody.MovePosition(transform.position + forward);
+        myRigidbody.AddForce(forward * forceCar, ForceMode.Impulse);
     }
     
     private void HandleSteering()

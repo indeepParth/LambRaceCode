@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5770481610854409657}
   - component: {fileID: 5770481610853115289}
   - component: {fileID: 5770481610852116313}
+  - component: {fileID: 2671730836916233601}
   m_Layer: 0
   m_Name: building-cafe
   m_TagString: Untagged
@@ -85,3 +86,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &2671730836916233601
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5770481610854054297}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 10.8476095, y: 8.488509, z: 10.479187}
+  m_Center: {x: 0.16661596, y: 4.2442546, z: 0.03747964}

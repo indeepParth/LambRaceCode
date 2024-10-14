@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5800875532184938419}
   - component: {fileID: 5800875532184135571}
   - component: {fileID: 5800875532183037267}
+  - component: {fileID: 4492594537511602505}
   m_Layer: 0
   m_Name: building-casino
   m_TagString: Untagged
@@ -85,3 +86,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &4492594537511602505
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5800875532185041811}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 18, y: 11.599999, z: 14}
+  m_Center: {x: 0, y: 5.7999997, z: 1}
