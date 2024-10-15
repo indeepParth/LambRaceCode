@@ -226,7 +226,8 @@ public class MyCarController : MonoBehaviour
         {
             //transform.Rotate(0, currentTurnAngle, 0);
             Quaternion deltaRotation = Quaternion.Euler(0, currentTurnAngle * Time.fixedDeltaTime, 0);
-            myRigidbody.MoveRotation(myRigidbody.rotation * deltaRotation);
+            // myRigidbody.MoveRotation(myRigidbody.rotation * deltaRotation);
+            myRigidbody.rotation = myRigidbody.rotation * deltaRotation;
         }        
     }
 

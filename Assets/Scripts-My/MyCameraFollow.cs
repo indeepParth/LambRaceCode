@@ -32,10 +32,10 @@ public class MyCameraFollow : MonoBehaviour
                 followSpeed * Time.deltaTime);
 
             Debug.Log("playerForward" + playerForward);
-            if (playerForward.z > 0 && !MyGameController.instance.MyManager.carLambController.isReverse)
-            { MyGameController.instance.MyManager.carLambController.OnReverseUpdateCarChildPosition(false); }
-            else if (playerForward.z < 0 && MyGameController.instance.MyManager.carLambController.isReverse)
-            { MyGameController.instance.MyManager.carLambController.OnReverseUpdateCarChildPosition(true); }
+            // if (playerForward.z > 0 && !MyGameController.instance.MyManager.carLambController.isReverse)
+            // { MyGameController.instance.MyManager.carLambController.OnReverseUpdateCarChildPosition(false); }
+            // else if (playerForward.z < 0 && MyGameController.instance.MyManager.carLambController.isReverse)
+            // { MyGameController.instance.MyManager.carLambController.OnReverseUpdateCarChildPosition(true); }
 
             lastCamPosOnCar = transform.position;
         }
