@@ -406,10 +406,10 @@ public class MyCarController : MonoBehaviour
                     DOTween.To(() => valFloat, x => valFloat = x, -oilSlipInput, 0.5f).OnUpdate(() => { oilSlipFactor = valFloat; })
                     .OnComplete(() =>
                     {
-                        DOTween.To(() => valFloat, x => valFloat = x, oilSlipInput, 0.5f).OnUpdate(() => { oilSlipFactor = valFloat; })
+                        DOTween.To(() => valFloat, x => valFloat = x, oilSlipInput, 0.3f).OnUpdate(() => { oilSlipFactor = valFloat; })
                         .OnComplete(() =>
                         {
-                            DOTween.To(() => valFloat, x => valFloat = x, -oilSlipInput, 0.5f).OnUpdate(() => { oilSlipFactor = valFloat; })
+                            DOTween.To(() => valFloat, x => valFloat = x, -oilSlipInput, 0.3f).OnUpdate(() => { oilSlipFactor = valFloat; })
                             .OnComplete(() =>
                             {
                                 oilSlipFactor = 0;
