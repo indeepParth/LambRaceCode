@@ -71,6 +71,10 @@ public class MyCarController : MonoBehaviour
 
     public float forceCar = 1;
 
+    public bool enableOilSpillEffect = false;
+    public float oilSlipFactor = 0;
+    public float oilSlipInput = 0.6f;
+
     private void Awake()
     {
         _maxSpeed = maxSpeed;
@@ -91,6 +95,7 @@ public class MyCarController : MonoBehaviour
         //HandleBoost();
         //UpdateWheelPoses();
         //DetectSurface();
+        OilSpillEffect();
         float turnInput = Input.GetAxis("Horizontal");
         foreach (var wheel in frontWheelTransforms)
         {
@@ -197,8 +202,13 @@ public class MyCarController : MonoBehaviour
         {
             turnInput = 0;
         }
+        else if(enableOilSpillEffect)
+        {
+            turnInput = oilSlipFactor;
+        }
+        
         // Handle drifting
-        if (Input.GetKey(KeyCode.Space) && (isDrifting || Mathf.Abs(turnInput) > 0.5f) && (isDrifting || currentSpeed > maxSpeed * 0.5f)) // Drift when turning sharply and at higher speeds
+        if ((Input.GetKey(KeyCode.Space) || enableOilSpillEffect) && (isDrifting || Mathf.Abs(turnInput) > 0.5f) && (isDrifting || currentSpeed > maxSpeed * 0.5f)) // Drift when turning sharply and at higher speeds
         {
             isDrifting = true;
             rotationToDrift = Quaternion.Euler(0, turnInput * driftAngle, 0);
@@ -311,7 +321,7 @@ public class MyCarController : MonoBehaviour
         nextBoostTime = 0;
     }
 
-    private void OnTriggerEnter(Collider other)
+    /*private void OnTriggerEnter(Collider other)
     {
         return;
         if (other.gameObject.CompareTag("carAI"))
@@ -325,7 +335,7 @@ public class MyCarController : MonoBehaviour
             hitPoint.y += 1;
             other.gameObject.GetComponent<AITrafficCar>().HideAfterAccident(dir, hitPoint);
         }
-    }
+    }*/
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -379,5 +389,41 @@ public class MyCarController : MonoBehaviour
         Vector3 box = boxCollider.center;
         box.z = -2f;
         boxCollider.center = box;
+    }
+
+    bool oilTweeenStarts = false;
+    void OilSpillEffect()
+    {
+        if(!oilTweeenStarts && enableOilSpillEffect)
+        {
+            if (currentSpeed > maxSpeed * 0.5f)
+            {
+                oilTweeenStarts = true;
+                float valFloat = 0f;
+                DOTween.To(() => valFloat, x => valFloat = x, oilSlipInput, 0.5f).OnUpdate(() => { oilSlipFactor = valFloat; })
+                .OnComplete(() =>
+                {
+                    DOTween.To(() => valFloat, x => valFloat = x, -oilSlipInput, 0.5f).OnUpdate(() => { oilSlipFactor = valFloat; })
+                    .OnComplete(() =>
+                    {
+                        DOTween.To(() => valFloat, x => valFloat = x, oilSlipInput, 0.5f).OnUpdate(() => { oilSlipFactor = valFloat; })
+                        .OnComplete(() =>
+                        {
+                            DOTween.To(() => valFloat, x => valFloat = x, -oilSlipInput, 0.5f).OnUpdate(() => { oilSlipFactor = valFloat; })
+                            .OnComplete(() =>
+                            {
+                                oilSlipFactor = 0;
+                                enableOilSpillEffect = false;
+                                oilTweeenStarts = false;
+                            });
+                        });
+                    });
+                });
+            }
+            else
+            {
+                enableOilSpillEffect = false;
+            }
+        }
     }
 }
