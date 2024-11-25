@@ -205,6 +205,7 @@ public class MyCarController : MonoBehaviour
         else if(enableOilSpillEffect)
         {
             turnInput = oilSlipFactor;
+            // turnInput = Mathf.Clamp(turnInput, -1, 1);
         }
         
         // Handle drifting
@@ -406,15 +407,23 @@ public class MyCarController : MonoBehaviour
                     DOTween.To(() => valFloat, x => valFloat = x, -oilSlipInput, 0.5f).OnUpdate(() => { oilSlipFactor = valFloat; })
                     .OnComplete(() =>
                     {
-                        DOTween.To(() => valFloat, x => valFloat = x, oilSlipInput, 0.3f).OnUpdate(() => { oilSlipFactor = valFloat; })
+                        DOTween.To(() => valFloat, x => valFloat = x, oilSlipInput, 0.5f).OnUpdate(() => { oilSlipFactor = valFloat; })
                         .OnComplete(() =>
                         {
-                            DOTween.To(() => valFloat, x => valFloat = x, -oilSlipInput, 0.3f).OnUpdate(() => { oilSlipFactor = valFloat; })
+                            DOTween.To(() => valFloat, x => valFloat = x, -oilSlipInput, 0.5f).OnUpdate(() => { oilSlipFactor = valFloat; })
                             .OnComplete(() =>
                             {
-                                oilSlipFactor = 0;
-                                enableOilSpillEffect = false;
-                                oilTweeenStarts = false;
+                                DOTween.To(() => valFloat, x => valFloat = x, oilSlipInput, 0.3f).OnUpdate(() => { oilSlipFactor = valFloat; })
+                                .OnComplete(() =>
+                                {
+                                    DOTween.To(() => valFloat, x => valFloat = x, -oilSlipInput, 0.3f).OnUpdate(() => { oilSlipFactor = valFloat; })
+                                    .OnComplete(() =>
+                                    {
+                                        oilSlipFactor = 0;
+                                        enableOilSpillEffect = false;
+                                        oilTweeenStarts = false;
+                                    });
+                                });
                             });
                         });
                     });
