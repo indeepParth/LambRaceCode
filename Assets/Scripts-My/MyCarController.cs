@@ -1,8 +1,6 @@
 using DG.Tweening;
 using PG;
 using System;
-using TurnTheGameOn.SimpleTrafficSystem;
-using Unity.Mathematics;
 using UnityEngine;
 
 public enum PowerUpEnum
@@ -401,22 +399,29 @@ public class MyCarController : MonoBehaviour
             {
                 oilTweeenStarts = true;
                 float valFloat = 0f;
-                DOTween.To(() => valFloat, x => valFloat = x, oilSlipInput, 0.5f).OnUpdate(() => { oilSlipFactor = valFloat; })
+                float timeRandom = UnityEngine.Random.Range(0.4f, 0.6f);
+                bool isright = timeRandom > 0.5f ? true : false;
+                DOTween.To(() => valFloat, x => valFloat = x, oilSlipInput, timeRandom).SetDelay(isright ? 0: timeRandom).OnUpdate(() => { oilSlipFactor = valFloat; })
                 .OnComplete(() =>
                 {
-                    DOTween.To(() => valFloat, x => valFloat = x, -oilSlipInput, 0.5f).OnUpdate(() => { oilSlipFactor = valFloat; })
+                    timeRandom = UnityEngine.Random.Range(0.3f, 0.6f);
+                    DOTween.To(() => valFloat, x => valFloat = x, -oilSlipInput, timeRandom).SetDelay(!isright ? 0 : timeRandom).OnUpdate(() => { oilSlipFactor = valFloat; })
                     .OnComplete(() =>
                     {
-                        DOTween.To(() => valFloat, x => valFloat = x, oilSlipInput, 0.5f).OnUpdate(() => { oilSlipFactor = valFloat; })
+                        timeRandom = UnityEngine.Random.Range(0.2f, 0.6f);
+                        DOTween.To(() => valFloat, x => valFloat = x, oilSlipInput, timeRandom).SetDelay(timeRandom).OnUpdate(() => { oilSlipFactor = valFloat; })
                         .OnComplete(() =>
                         {
-                            DOTween.To(() => valFloat, x => valFloat = x, -oilSlipInput, 0.5f).OnUpdate(() => { oilSlipFactor = valFloat; })
+                            timeRandom = UnityEngine.Random.Range(0.2f, 0.6f);
+                            DOTween.To(() => valFloat, x => valFloat = x, -oilSlipInput, timeRandom).OnUpdate(() => { oilSlipFactor = valFloat; })
                             .OnComplete(() =>
                             {
-                                DOTween.To(() => valFloat, x => valFloat = x, oilSlipInput, 0.3f).OnUpdate(() => { oilSlipFactor = valFloat; })
+                                timeRandom = UnityEngine.Random.Range(0.1f, 0.4f);
+                                DOTween.To(() => valFloat, x => valFloat = x, oilSlipInput, timeRandom).OnUpdate(() => { oilSlipFactor = valFloat; })
                                 .OnComplete(() =>
                                 {
-                                    DOTween.To(() => valFloat, x => valFloat = x, -oilSlipInput, 0.3f).OnUpdate(() => { oilSlipFactor = valFloat; })
+                                    timeRandom = UnityEngine.Random.Range(0.1f, 0.3f);
+                                    DOTween.To(() => valFloat, x => valFloat = x, -oilSlipInput, timeRandom).OnUpdate(() => { oilSlipFactor = valFloat; })
                                     .OnComplete(() =>
                                     {
                                         oilSlipFactor = 0;
