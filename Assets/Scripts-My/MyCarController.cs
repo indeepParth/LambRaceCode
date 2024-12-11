@@ -73,6 +73,8 @@ public class MyCarController : MonoBehaviour
     public float oilSlipFactor = 0;
     public float oilSlipInput = 0.6f;
 
+    public float jumpYFactor = 0.2f;
+
     private void Awake()
     {
         _maxSpeed = maxSpeed;
@@ -85,6 +87,7 @@ public class MyCarController : MonoBehaviour
         HandleBoost();
         UpdateWheelPoses();
         DetectSurface();
+        if(jumpEffect){ JumpBoostEffectEnd(); }
     }
 
     void Update()
@@ -187,7 +190,15 @@ public class MyCarController : MonoBehaviour
             currentSpeed *= brakeFactor;
         }*/
 
-        Vector3 forward = transform.forward * currentSpeed * Time.deltaTime;        
+        Vector3 forward = transform.forward * currentSpeed * Time.deltaTime;
+        // if (jumpEffect)
+        // {
+        //     forward = new Vector3( 0, jumpYFactor * currentSpeed * Time.deltaTime, currentSpeed * Time.deltaTime).normalized;
+        // }
+        // else
+        // {
+        //     forward = transform.forward * currentSpeed * Time.deltaTime;
+        // }
         //transform.position += forward;
         // myRigidbody.MovePosition(transform.position + forward);
         myRigidbody.AddForce(forward * forceCar, ForceMode.Impulse);
@@ -349,7 +360,23 @@ public class MyCarController : MonoBehaviour
             //Vector3 dir = hitPoint - transform.position;
             //collision.gameObject.GetComponent<AITrafficCar>().HideAfterAccident(dir, hitPoint);
         }
+        else if (collision.gameObject.CompareTag("jump_Platform"))
+        {
+            JumpEffectStart();
+            // Quaternion deltaRotation = Quaternion.Euler(60, 0, 0);
+            // myRigidbody.rotation = myRigidbody.rotation * deltaRotation;
+        }
     }
+
+    // void OnCollisionExit(Collision collision)
+    // {
+    //     if (collision.gameObject.CompareTag("jump_Platform"))
+    //     {
+            
+    //         // Quaternion deltaRotation = Quaternion.Euler(0, 0, 0);
+    //         // myRigidbody.rotation = myRigidbody.rotation * deltaRotation;
+    //     }
+    // }
 
     bool carChildPivotBack = false;
     public void OnReverseUpdateCarChildPosition(bool _isReverse)
@@ -438,6 +465,37 @@ public class MyCarController : MonoBehaviour
             {
                 enableOilSpillEffect = false;
             }
+        }
+    }
+
+    private bool jumpEffect = false;
+    private void JumpEffectStart()
+    {        
+        if (!blockControl && !isBoosting && currentSpeed > 0)
+        {
+            jumpEffect = true;
+            isBoosting = true;
+            maxSpeed *= boostMultiplier;
+            currentSpeed = maxSpeed; // Apply boost
+            boostEndTime = Time.time + boostDuration; // Set the end time for the boost            
+            MyGameController.instance.MyManager.OnBoostNitroEnableSpeedEffect();
+            carVFX.UpdateBoost(isBoosting);
+            // myRigidbody.useGravity = false;
+        }        
+    }
+    private void JumpBoostEffectEnd()
+    {
+        // Reset speed after boost duration
+        if (isBoosting && Time.time > boostEndTime && boostEndTime != 0)
+        {
+            // myRigidbody.useGravity = true;
+            jumpEffect = false;
+            maxSpeed /= boostMultiplier;
+            currentSpeed = maxSpeed;
+            boostEndTime = 0;
+            isBoosting = false;
+            MyGameController.instance.MyManager.DisableSpeedEffect();
+            carVFX.UpdateBoost(isBoosting);
         }
     }
 }
