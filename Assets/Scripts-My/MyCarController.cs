@@ -1,6 +1,7 @@
 using DG.Tweening;
 using PG;
 using System;
+using System.Data;
 using UnityEngine;
 
 public enum PowerUpEnum
@@ -83,11 +84,11 @@ public class MyCarController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (jumpEffect) { JumpBoostEffectEnd(); }
         HandleMovement();
         HandleBoost();
         UpdateWheelPoses();
-        DetectSurface();
-        if(jumpEffect){ JumpBoostEffectEnd(); }
+        DetectSurface();        
     }
 
     void Update()
@@ -191,14 +192,15 @@ public class MyCarController : MonoBehaviour
         }*/
 
         Vector3 forward = transform.forward * currentSpeed * Time.deltaTime;
-        // if (jumpEffect)
-        // {
-        //     forward = new Vector3( 0, jumpYFactor * currentSpeed * Time.deltaTime, currentSpeed * Time.deltaTime).normalized;
-        // }
-        // else
-        // {
-        //     forward = transform.forward * currentSpeed * Time.deltaTime;
-        // }
+        if (jumpEffect)
+        {
+            forward = (transform.forward + (transform.up * jumpYFactor)) * currentSpeed * Time.deltaTime;
+            // forward = new Vector3( 0, jumpYFactor * currentSpeed * Time.deltaTime, currentSpeed * Time.deltaTime);
+        }
+        else
+        {
+            forward = transform.forward * currentSpeed * Time.deltaTime;
+        }
         //transform.position += forward;
         // myRigidbody.MovePosition(transform.position + forward);
         myRigidbody.AddForce(forward * forceCar, ForceMode.Impulse);
@@ -480,15 +482,15 @@ public class MyCarController : MonoBehaviour
             boostEndTime = Time.time + boostDuration; // Set the end time for the boost            
             MyGameController.instance.MyManager.OnBoostNitroEnableSpeedEffect();
             carVFX.UpdateBoost(isBoosting);
-            // myRigidbody.useGravity = false;
+            myRigidbody.useGravity = false;
+            // myRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         }        
     }
     private void JumpBoostEffectEnd()
     {
         // Reset speed after boost duration
         if (isBoosting && Time.time > boostEndTime && boostEndTime != 0)
-        {
-            // myRigidbody.useGravity = true;
+        {            
             jumpEffect = false;
             maxSpeed /= boostMultiplier;
             currentSpeed = maxSpeed;
@@ -496,6 +498,12 @@ public class MyCarController : MonoBehaviour
             isBoosting = false;
             MyGameController.instance.MyManager.DisableSpeedEffect();
             carVFX.UpdateBoost(isBoosting);
+            myRigidbody.useGravity = true;
+            // myRigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        }
+        else if(isBoosting && Time.time > boostEndTime-1 && boostEndTime != 0)
+        {
+            myRigidbody.useGravity = true;
         }
     }
 }
