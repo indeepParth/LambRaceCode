@@ -185,15 +185,16 @@
         }
         #endregion
 
-        public void HideAfterAccident(Vector3 dir, Vector3 hitPoint)
+        public void HideAfterAccident() // Vector3 dir, Vector3 hitPoint
         {
             if (gameObject.activeInHierarchy)
             {
-                float force = MyGameController.instance.MyManager.carLambController.hitForceToOther
-                    * MyGameController.instance.MyManager.carLambController.currentSpeed;
-                force = Mathf.Clamp(force, 500, 2000);
-                rb.AddForceAtPosition(dir.normalized * force, hitPoint, ForceMode.Impulse);
-                Timer.Schedule(this, 2, MoveCarToPool);
+                MoveCarToPool();
+                // float force = MyGameController.instance.MyManager.carLambController.hitForceToOther
+                //     * MyGameController.instance.MyManager.carLambController.currentSpeed;
+                // force = Mathf.Clamp(force, 500, 2000);
+                // rb.AddForceAtPosition(dir.normalized * force, hitPoint, ForceMode.Impulse);
+                // Timer.Schedule(this, 2, MoveCarToPool);
             }
         }
     }

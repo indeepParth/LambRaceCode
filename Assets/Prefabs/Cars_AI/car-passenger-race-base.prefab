@@ -630,6 +630,7 @@ Transform:
   - {fileID: 2344360801043237551}
   - {fileID: 8365360858499712719}
   - {fileID: 177968720051894873}
+  - {fileID: 5026058153595903412}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &265528730425635400
@@ -795,6 +796,73 @@ MonoBehaviour:
   brakeMaterial: {fileID: 0}
   headLight: {fileID: 5089609460975235313}
   goToStartOnStop: 0
+--- !u!1 &7066131882038564666
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5026058153595903412}
+  - component: {fileID: 7823986095605770761}
+  - component: {fileID: 6435409300301237166}
+  m_Layer: 10
+  m_Name: collider hide
+  m_TagString: carhidetop
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5026058153595903412
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7066131882038564666}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5310731016102931449}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7823986095605770761
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7066131882038564666}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.29401994, z: 4.5}
+  m_Center: {x: 0, y: 1.35299, z: 0}
+--- !u!114 &6435409300301237166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7066131882038564666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8589298f16a98754586cccc2f699dcfa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aITrafficCar: {fileID: 5120953925193203957}
 --- !u!1 &7318284409730162763
 GameObject:
   m_ObjectHideFlags: 0
