@@ -37,8 +37,9 @@ public class MyCarController : MonoBehaviour
         } 
     }
 
-    public float penalty_Sidewalk = 10;
-    public float penalty_sand = 5;
+    public float penalty_Sidewalk = 15;
+    public float penalty_sand = 10;
+    public bool isGrounded = false;
 
     public float turnSpeedReductionFactor = 0.5f;
     public float driftFactor = 0.95f; // How much the car drifts
@@ -199,7 +200,14 @@ public class MyCarController : MonoBehaviour
         }
         else
         {
-            forward = transform.forward * currentSpeed * Time.deltaTime;
+            if (!isGrounded)
+            {
+                forward = (transform.forward + (-transform.up * jumpYFactor * 2)) * currentSpeed * Time.deltaTime;
+            }
+            else
+            {
+                forward = transform.forward * currentSpeed * Time.deltaTime;
+            }
         }
         //transform.position += forward;
         // myRigidbody.MovePosition(transform.position + forward);
@@ -308,18 +316,27 @@ public class MyCarController : MonoBehaviour
 
         int layerMaskRoad = 1 << 6; // road
         int layerMaskSideWalk = 1 << 11; // side walk
+        int layerMaskSand = 1 << 12; // sand
         RaycastHit hit;
         if (Physics.Raycast(transform.position, Vector3.down, out hit, 10, layerMaskRoad))
         {
             maxSpeed = _maxSpeed;
+            isGrounded = true;
         }
         else if (Physics.Raycast(transform.position, Vector3.down, out hit, 10, layerMaskSideWalk))
         {
             maxSpeed = penalty_Sidewalk;
+            isGrounded = true;
+        }
+        else if (Physics.Raycast(transform.position, Vector3.down, out hit, 10, layerMaskSand))
+        {
+            maxSpeed = penalty_sand;
+            isGrounded = true;
         }
         else
         {
-            maxSpeed = penalty_sand;
+            maxSpeed = _maxSpeed;
+            isGrounded = false;
         }
     }
 
