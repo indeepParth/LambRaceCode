@@ -40,6 +40,7 @@ public class MyCarController : MonoBehaviour
     public float penalty_Sidewalk = 15;
     public float penalty_sand = 10;
     public bool isGrounded = false;
+    public bool isInAir = false;
 
     public float turnSpeedReductionFactor = 0.5f;
     public float driftFactor = 0.95f; // How much the car drifts
@@ -197,16 +198,19 @@ public class MyCarController : MonoBehaviour
         {
             forward = (transform.forward + (transform.up * jumpYFactor)) * currentSpeed * Time.deltaTime;
             // forward = new Vector3( 0, jumpYFactor * currentSpeed * Time.deltaTime, currentSpeed * Time.deltaTime);
+            Debug.Log("jump UP = " + isGrounded);
         }
         else
         {
-            if (!isGrounded)
+            if (isInAir)
             {
                 forward = (transform.forward + (-transform.up * jumpYFactor * 2)) * currentSpeed * Time.deltaTime;
+                Debug.Log("jump DOWN = " + isGrounded);
             }
             else
-            {
+            {                
                 forward = transform.forward * currentSpeed * Time.deltaTime;
+                // Debug.Log("Forward");
             }
         }
         //transform.position += forward;
@@ -322,16 +326,19 @@ public class MyCarController : MonoBehaviour
         {
             maxSpeed = _maxSpeed;
             isGrounded = true;
+            isInAir = false;
         }
         else if (Physics.Raycast(transform.position, Vector3.down, out hit, 10, layerMaskSideWalk))
         {
             maxSpeed = penalty_Sidewalk;
             isGrounded = true;
+            isInAir = false;
         }
         else if (Physics.Raycast(transform.position, Vector3.down, out hit, 10, layerMaskSand))
         {
             maxSpeed = penalty_sand;
             isGrounded = true;
+            isInAir = false;
         }
         else
         {
@@ -501,6 +508,7 @@ public class MyCarController : MonoBehaviour
             carVFX.UpdateBoost(isBoosting);
             myRigidbody.useGravity = false;
             // myRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+            isInAir = true;
         }        
     }
     private void JumpBoostEffectEnd()
