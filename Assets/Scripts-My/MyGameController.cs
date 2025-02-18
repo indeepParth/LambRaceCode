@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using TMPro;
 
 public class MyGameController : MonoBehaviour
 {
@@ -115,6 +116,8 @@ public class MyGameController : MonoBehaviour
     public bool isGameStart;
     public bool isGamePause;
 
+    public TextMeshProUGUI textCountDown321;
+
     public int rewardHeartPoint = 1;
     public int HeartPoint
     {
@@ -132,7 +135,7 @@ public class MyGameController : MonoBehaviour
         PlayFabLogin.GameWonRewardEvent((respoce) =>
         {
             UpdateHeartPoint(respoce);
-        });        
+        });
     }
     public void UpdateHeartPoint(int respoce)
     {
@@ -169,8 +172,10 @@ public class MyGameController : MonoBehaviour
 
     public void StartGame()
     {
-        isGameStart = true;
-        MySoundManager.RaceTrackSound(true);
+        // CountDown321GoOnStart();
+        Timer.Schedule(this, 1f, CountDown321GoOnStart);
+        // isGameStart = true;
+        // MySoundManager.RaceTrackSound(true);
     }
 
     // Update is called once per frame
@@ -211,7 +216,7 @@ public class MyGameController : MonoBehaviour
     }
     private void HideTimeBonusTextAnimAdd()
     {
-        RectTransform _rectTransform = UIManager.timeBonusTextAnimAdd.GetComponent<RectTransform>();        
+        RectTransform _rectTransform = UIManager.timeBonusTextAnimAdd.GetComponent<RectTransform>();
         _rectTransform.DOAnchorPosY(-40, 0).OnComplete(() =>
         {
             UIManager.timeBonusTextAnimAdd.DOFade(1, 0);
@@ -221,6 +226,46 @@ public class MyGameController : MonoBehaviour
                 UIManager.timeBonusTextAnimAdd.gameObject.SetActive(false);
             });
             UIManager.timeBonusTextAnimAdd.DOFade(0, 0.4f).SetDelay(1);
+        });
+    }
+
+    public Ease easeType = Ease.Linear;
+    public void CountDown321GoOnStart()
+    {
+        textCountDown321.text = "3";
+        textCountDown321.gameObject.SetActive(true);
+
+        textCountDown321.transform.DOScale(Vector3.one * 1.5f, 0.5f).SetEase(easeType).OnComplete(() =>
+        {
+            textCountDown321.transform.DOScale(Vector3.one, 0.5f).SetEase(easeType).OnComplete(() =>
+            {
+                textCountDown321.text = "2";
+                textCountDown321.transform.DOScale(Vector3.one * 1.5f, 0.5f).SetEase(easeType).OnComplete(() =>
+                {
+                    textCountDown321.transform.DOScale(Vector3.one, 0.5f).SetEase(easeType).OnComplete(() =>
+                    {
+                        textCountDown321.text = "1";
+                        textCountDown321.transform.DOScale(Vector3.one * 1.5f, 0.5f).SetEase(easeType).OnComplete(() =>
+                        {
+                            textCountDown321.transform.DOScale(Vector3.one, 0.5f).SetEase(easeType).OnComplete(() =>
+                            {
+                                textCountDown321.text = "GO";
+                                textCountDown321.transform.DOScale(Vector3.one * 1.5f, 0.5f).SetEase(easeType).OnComplete(() =>
+                                {
+                                    textCountDown321.transform.DOScale(Vector3.one, 0.5f).SetEase(easeType).OnComplete(() =>
+                                    {
+                                        textCountDown321.gameObject.SetActive(false);
+                                        // StartGame();
+                                        MyManager.carLambController.UpdateBlockControl(false);
+                                        isGameStart = true;
+                                        MySoundManager.RaceTrackSound(true);
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
         });
     }
 }

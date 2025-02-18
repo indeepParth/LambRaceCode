@@ -82,6 +82,7 @@ public class MyCarController : MonoBehaviour
     {
         _maxSpeed = maxSpeed;
         myChildCar = transform.GetChild(0);
+        UpdateBlockControl(true);
     }
 
     private void FixedUpdate()
