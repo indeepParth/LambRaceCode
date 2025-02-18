@@ -47,7 +47,7 @@ public class MyCarController : MonoBehaviour
     public float driftControl = 0.5f; // How much control the player has over drifting
     public float driftControlWhenNoDrift = 1.2f;
     public float driftAngle = 20;
-    private bool isDrifting = false;
+    public bool isDrifting = false;
     public float driftAngleOnTurning = 1.3f;
     public float turningAngleOnChild = 10;
     private Vector3 driftVelocity;
@@ -161,7 +161,7 @@ public class MyCarController : MonoBehaviour
                 }
                 else
                 {
-                    currentSpeed += moveInput * acceleration * Time.deltaTime;
+                    currentSpeed += moveInput * 0.25f * acceleration * Time.deltaTime;
                     isBrakeing = false;
                     isReverse = true;
                     //if (!blockControl && currentSpeed <= -1)
@@ -268,7 +268,7 @@ public class MyCarController : MonoBehaviour
     private void HandleBoost()
     {
         // Check if the boost key is pressed and boost is available
-        if (!blockControl && !isBoosting && currentSpeed > 0 && Input.GetKeyDown(KeyCode.LeftAlt) && Time.time > nextBoostTime)
+        if (!blockControl && !isBoosting && currentSpeed > 0 && Input.GetKeyDown(KeyCode.N) && Time.time > nextBoostTime)
         {
             isBoosting = true;
             maxSpeed *= boostMultiplier;

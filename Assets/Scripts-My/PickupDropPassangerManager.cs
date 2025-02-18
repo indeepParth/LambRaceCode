@@ -177,6 +177,7 @@ public class PickupDropPassangerManager : MonoBehaviour
         if (isPickupGirl)
         {
             MyGameController.instance.MyCameraFollow.OnCameraFocusChange(false);
+            MyGameController.instance.isGamePause = true;
             // character walk in car animation
             GetNearestCarCorner();
         }
@@ -334,12 +335,13 @@ public class PickupDropPassangerManager : MonoBehaviour
         MyGameController.instance.MyCameraFollow.OnCameraFocusChange(true);
         passangerAnimator.SetBool("walk", false);
         passanger.transform.parent = doorPoint.transform;
-        isPickupGirl = false;        
+        isPickupGirl = false;
         nearestCarCorner = null;
         passangerAnimator.SetTrigger("entercar");
         PickupDropPoint.gameObject.SetActive(false);
         GetPickDropPointLocation();
         MyGameController.instance.MyManager.carLambController.UpdateBlockControl(false);
+        MyGameController.instance.isGamePause = false;
     }
     public void HandAnimationInCar(bool _hand)
     {

@@ -115,15 +115,19 @@ public class MyCarStateUI : MonoBehaviour
             -1 :
             carLambController.currentSpeed > -0.05f && carLambController.currentSpeed < 0.05f ?
             0 :
-            carLambController.currentSpeed < CarMaxSpeedForGearCalculation() * 0.2f ?
+            carLambController.currentSpeed < CarMaxSpeedForGearCalculation() * 0.15f ?
             1 :
-            carLambController.currentSpeed < CarMaxSpeedForGearCalculation() * 0.4f ?
+            carLambController.currentSpeed < CarMaxSpeedForGearCalculation() * 0.3f ?
             2 :
-            carLambController.currentSpeed < CarMaxSpeedForGearCalculation() * 0.6f ?
+            carLambController.currentSpeed < CarMaxSpeedForGearCalculation() * 0.45f ?
             3 :
-            carLambController.currentSpeed < CarMaxSpeedForGearCalculation() * 0.8f ?
+            carLambController.currentSpeed < CarMaxSpeedForGearCalculation() * 0.6f ?
             4 :
-            5;
+            carLambController.currentSpeed < CarMaxSpeedForGearCalculation() * 0.75f ?
+            5 :
+            carLambController.currentSpeed < CarMaxSpeedForGearCalculation() * 0.9f ?
+            6 :
+            7;
 
         if (CurrentGear != currentGear)
         {
@@ -222,7 +226,7 @@ public class MyCarStateUI : MonoBehaviour
         if (HandbrakeIcon)
         {
             color = HandbrakeIcon.color;
-            if (carLambController.isBrakeing)
+            if (carLambController.isDrifting) //isBrakeing
             {
                 color.a = 1;
             }
