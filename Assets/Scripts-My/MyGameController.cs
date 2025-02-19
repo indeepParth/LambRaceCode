@@ -8,6 +8,14 @@ using UnityEngine;
 using DG.Tweening;
 using TMPro;
 
+public enum GameMode
+{
+    None,
+    DateRush,
+    GrandPrix,
+    FreeRide
+}
+
 public class MyGameController : MonoBehaviour
 {
     private MyManager myManager;
@@ -106,6 +114,7 @@ public class MyGameController : MonoBehaviour
 
 
     public static MyGameController instance;
+    public GameMode gameMode = GameMode.None;
     public bool freeMode = false;
     public int timer = 180;
     public int countDownTime = 120;
@@ -189,7 +198,7 @@ public class MyGameController : MonoBehaviour
         if (isGameOver || isGamePause)
             return;
 
-        if (!freeMode && isGameStart)
+        if (gameMode == GameMode.DateRush && isGameStart)
         {
             t = t + Time.deltaTime;
             if (t >= 1)

@@ -51,7 +51,8 @@ public class UIManager : MonoBehaviour
     //  Home UI
     public void BTN_FreeRideMode()
     {
-        MyGameController.instance.freeMode = true;
+        // MyGameController.instance.freeMode = true;
+        MyGameController.instance.gameMode = GameMode.FreeRide;
         SceneLoader(1, () =>
         {
             MyGameController.instance.StartGame();
@@ -64,7 +65,8 @@ public class UIManager : MonoBehaviour
 
     public void BTN_MiamiCrazyTextMode()
     {
-        MyGameController.instance.freeMode = false;
+        // MyGameController.instance.freeMode = false;
+        MyGameController.instance.gameMode = GameMode.DateRush;
         SceneLoader(1, () =>
         {
             MyGameController.instance.StartGame();
@@ -77,6 +79,7 @@ public class UIManager : MonoBehaviour
 
     public void Btn_HomeOnGameOver()
     {
+        MyGameController.instance.gameMode = GameMode.None;
         MyGameController.instance.MySoundManager.RaceTrackSound(false);
         SceneLoader(0, () =>
         {            
@@ -102,7 +105,7 @@ public class UIManager : MonoBehaviour
         {
             MyGameController.instance.StartGame();
             gameOverPanel.SetActive(false);
-            if (MyGameController.instance.freeMode)
+            if (MyGameController.instance.gameMode == GameMode.FreeRide)
             {
                 gameFreePanel.SetActive(true); gamePanel.SetActive(false);
             }

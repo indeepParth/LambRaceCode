@@ -84,7 +84,8 @@ public class PickupDropPassangerManager : MonoBehaviour
     private void Start()
     {
         directionalArrow.gameObject.SetActive(false);
-        if (!MyGameController.instance.freeMode)
+
+        if (MyGameController.instance.gameMode == GameMode.DateRush)
         {
             MyGameController.instance.MyManager.carLambController.powerUps.AddTimeBonusPowerUpAtStart();
             Invoke("DelayOnStart", 2);

@@ -162,7 +162,7 @@ public class MyCarController : MonoBehaviour
                 }
                 else
                 {
-                    currentSpeed += moveInput * 0.25f * acceleration * Time.deltaTime;
+                    currentSpeed += moveInput * 0.5f * acceleration * Time.deltaTime;
                     isBrakeing = false;
                     isReverse = true;
                     //if (!blockControl && currentSpeed <= -1)
@@ -170,7 +170,7 @@ public class MyCarController : MonoBehaviour
                 }
                 
             }
-            currentSpeed = Mathf.Clamp(currentSpeed, -maxSpeed, maxSpeed);
+            currentSpeed = Mathf.Clamp(currentSpeed, -maxSpeed * 0.5f, maxSpeed);
         }
         else if(!isBoosting)
         {
@@ -275,7 +275,7 @@ public class MyCarController : MonoBehaviour
             maxSpeed *= boostMultiplier;
             currentSpeed = maxSpeed; // Apply boost
             boostEndTime = Time.time + boostDuration; // Set the end time for the boost
-            if (!MyGameController.instance.freeMode)
+            if (MyGameController.instance.gameMode != GameMode.FreeRide)
             {
                 nextBoostTime = Time.time + boostCooldown + boostDuration + 1000000;
             }
