@@ -8,11 +8,22 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     public GameObject homePanel;
-    public GameObject gamePanel;
-    public GameObject gameFreePanel;
+    public GameObject gameDateRushPanel;
+    public GameObject gameGrandPrixPanel;
+    public GameObject gameFreeRidePanel;
     public GameObject gameOverPanel;
+
+    [Space(2)]
+    [Header("Date Rush")]
     public TextMeshProUGUI countDownText;
     public TextMeshProUGUI timeBonusTextAnimAdd;
+
+    [Space(2)]
+    [Header("Grand Prix")]
+    public TextMeshProUGUI counterUPText;
+
+    [Space(2)]
+    [Header("Other")]
     public RectTransform img_BoostReaction;
     private bool boostReactionAnimPlaying = false;
     public RectTransform img_BoostAvailable;
@@ -23,8 +34,8 @@ public class UIManager : MonoBehaviour
     {
         MyGameController.instance.ResetGame();
         homePanel.SetActive(true);
-        gameFreePanel.SetActive(false);
-        gamePanel.SetActive(false);
+        gameFreeRidePanel.SetActive(false);
+        gameDateRushPanel.SetActive(false);
         gameOverPanel.SetActive(false);
         IsBoostAvailable(false);
     }
@@ -56,8 +67,8 @@ public class UIManager : MonoBehaviour
         SceneLoader(1, () =>
         {
             MyGameController.instance.StartGame();
-            gameFreePanel.SetActive(true);
-            gamePanel.SetActive(false);
+            gameFreeRidePanel.SetActive(true);
+            gameDateRushPanel.SetActive(false);
             homePanel.SetActive(false);
             IsBoostAvailable(false);
         });
@@ -70,8 +81,8 @@ public class UIManager : MonoBehaviour
         SceneLoader(1, () =>
         {
             MyGameController.instance.StartGame();
-            gamePanel.SetActive(true);
-            gameFreePanel.SetActive(false);
+            gameDateRushPanel.SetActive(true);
+            gameFreeRidePanel.SetActive(false);
             homePanel.SetActive(false);
             IsBoostAvailable(false);
         });
@@ -84,8 +95,8 @@ public class UIManager : MonoBehaviour
         SceneLoader(0, () =>
         {            
             gameOverPanel.SetActive(false);
-            gamePanel.SetActive(false);
-            gameFreePanel.SetActive(false);
+            gameDateRushPanel.SetActive(false);
+            gameFreeRidePanel.SetActive(false);
             homePanel.SetActive(true);
             IsBoostAvailable(false);
         });
@@ -107,18 +118,18 @@ public class UIManager : MonoBehaviour
             gameOverPanel.SetActive(false);
             if (MyGameController.instance.gameMode == GameMode.FreeRide)
             {
-                gameFreePanel.SetActive(true); gamePanel.SetActive(false);
+                gameFreeRidePanel.SetActive(true); gameDateRushPanel.SetActive(false);
             }
             else
             {
-                gameFreePanel.SetActive(false); gamePanel.SetActive(true);
+                gameFreeRidePanel.SetActive(false); gameDateRushPanel.SetActive(true);
             }          
         });
     }    
 
     public void ShowGameOver()
     {
-        gamePanel.SetActive(false);
+        gameDateRushPanel.SetActive(false);
         gameOverPanel.SetActive(true);
         MyGameController.instance.MyManager.pickupDropPassangerManager.PickupDropPoint.SetActive(false);
     }

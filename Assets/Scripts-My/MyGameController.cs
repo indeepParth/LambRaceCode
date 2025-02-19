@@ -115,7 +115,6 @@ public class MyGameController : MonoBehaviour
 
     public static MyGameController instance;
     public GameMode gameMode = GameMode.None;
-    public bool freeMode = false;
     public int timer = 180;
     public int countDownTime = 120;
     public int increaseTimeReward = 60;
