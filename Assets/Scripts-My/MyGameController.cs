@@ -119,6 +119,7 @@ public class MyGameController : MonoBehaviour
     public int countDownTime = 120;
     public int increaseTimeReward = 60;
     float t = 0;
+    private int counterUpTime = 0;
 
     public bool isGameOver;
     public bool isGameStart;
@@ -212,6 +213,16 @@ public class MyGameController : MonoBehaviour
                     MyManager.carLambController.UpdateBlockControl(true);
                     UIManager.ShowGameOver();
                 }
+            }
+        }
+        else if (gameMode == GameMode.GrandPrix && isGameStart)
+        {
+            t = t + Time.deltaTime;
+            if (t >= 1)
+            {
+                t = 0;
+                counterUpTime = counterUpTime + 1;
+                UIManager.UpdateCounterUpTimer(counterUpTime);
             }
         }
     }

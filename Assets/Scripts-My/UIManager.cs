@@ -36,6 +36,7 @@ public class UIManager : MonoBehaviour
         homePanel.SetActive(true);
         gameFreeRidePanel.SetActive(false);
         gameDateRushPanel.SetActive(false);
+        gameGrandPrixPanel.SetActive(false);
         gameOverPanel.SetActive(false);
         IsBoostAvailable(false);
     }
@@ -69,6 +70,22 @@ public class UIManager : MonoBehaviour
             MyGameController.instance.StartGame();
             gameFreeRidePanel.SetActive(true);
             gameDateRushPanel.SetActive(false);
+            gameGrandPrixPanel.SetActive(false);
+            homePanel.SetActive(false);
+            IsBoostAvailable(false);
+        });
+    }
+
+    public void BTN_GrandPrixMode()
+    {
+        // MyGameController.instance.freeMode = true;
+        MyGameController.instance.gameMode = GameMode.GrandPrix;
+        SceneLoader(1, () =>
+        {
+            MyGameController.instance.StartGame();
+            gameFreeRidePanel.SetActive(false);
+            gameDateRushPanel.SetActive(false);
+            gameGrandPrixPanel.SetActive(true);
             homePanel.SetActive(false);
             IsBoostAvailable(false);
         });
@@ -83,6 +100,7 @@ public class UIManager : MonoBehaviour
             MyGameController.instance.StartGame();
             gameDateRushPanel.SetActive(true);
             gameFreeRidePanel.SetActive(false);
+            gameGrandPrixPanel.SetActive(false);
             homePanel.SetActive(false);
             IsBoostAvailable(false);
         });
@@ -97,6 +115,7 @@ public class UIManager : MonoBehaviour
             gameOverPanel.SetActive(false);
             gameDateRushPanel.SetActive(false);
             gameFreeRidePanel.SetActive(false);
+            gameGrandPrixPanel.SetActive(false);
             homePanel.SetActive(true);
             IsBoostAvailable(false);
         });
@@ -104,9 +123,14 @@ public class UIManager : MonoBehaviour
     //
 
     // IN Game UI
-    public void UpdateCountDownTimer(int time)
+    public void UpdateCountDownTimer(int time) // date rush mode
     {
         countDownText.text = time.ToString() + "s";
+    }
+
+    public void UpdateCounterUpTimer(int time) // grand prix mode
+    {
+        counterUPText.text = time.ToString() + "s";
     }
 
     // Over UI
@@ -123,7 +147,7 @@ public class UIManager : MonoBehaviour
             else
             {
                 gameFreeRidePanel.SetActive(false); gameDateRushPanel.SetActive(true);
-            }          
+            }
         });
     }    
 
