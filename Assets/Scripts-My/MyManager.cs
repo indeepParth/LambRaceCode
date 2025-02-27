@@ -7,6 +7,7 @@ using UnityEngine;
 using DG.DemiLib;
 using DG.Tweening;
 using UnityEngine.Rendering.PostProcessing;
+using TMPro;
 
 public class MyManager : MonoBehaviour
 {
@@ -18,6 +19,9 @@ public class MyManager : MonoBehaviour
     public PickupDropPassangerManager pickupDropPassangerManager;
     public ParticleSystem speedEffectParticle;
     public Camera mainCamera;
+
+    public GameObject grandPrixCheckPoints;
+    public TextMeshPro textStartFinish; // for grand prix mode only
 
     public bool nitro = false;
     private void OnEnable()

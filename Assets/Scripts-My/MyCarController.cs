@@ -30,11 +30,12 @@ public class MyCarController : MonoBehaviour
     public float currentSpeed = 0f;
     public bool isBrakeing = false;
     public bool isReverse = false;
-    public float SpeedInHour { 
+    public float SpeedInHour
+    {
         get
-        { 
+        {
             return (Mathf.Abs(currentSpeed) * CarParamsConstants.KPHMult);
-        } 
+        }
     }
 
     public float penalty_Sidewalk = 15;
@@ -60,7 +61,7 @@ public class MyCarController : MonoBehaviour
     public float boostMultiplier = 2f; // Multiplier for boost speed
     public float boostDuration = 3f; // Duration of the boost in seconds
     public float boostCooldown = 5f; // Cooldown time between boosts in seconds
-    
+
     private float boostEndTime = 0f;
     private float nextBoostTime = 0f;
 
@@ -91,7 +92,7 @@ public class MyCarController : MonoBehaviour
         HandleMovement();
         HandleBoost();
         UpdateWheelPoses();
-        DetectSurface();        
+        DetectSurface();
     }
 
     void Update()
@@ -106,7 +107,7 @@ public class MyCarController : MonoBehaviour
         {
             //Quaternion deltaRotation = Quaternion.Euler(0, turnInput * maxTurnAngle * turnSpeed, 0);
             Vector3 toV3 = new Vector3(0, turnInput * maxTurnAngle, 0);
-            wheel.localEulerAngles = Vector3.Lerp(wheel.localEulerAngles,toV3, turnSpeed * Time.deltaTime);
+            wheel.localEulerAngles = Vector3.Lerp(wheel.localEulerAngles, toV3, turnSpeed * Time.deltaTime);
         }
         float moveInput = Input.GetAxis("Vertical");
         if (currentSpeed > 2.01f || currentSpeed < -2.01f)
@@ -136,7 +137,7 @@ public class MyCarController : MonoBehaviour
     private void HandleMovement()
     {
         float moveInput = Input.GetAxis("Vertical");
-        if(blockControl)
+        if (blockControl)
         {
             moveInput = 0;
         }
@@ -149,11 +150,11 @@ public class MyCarController : MonoBehaviour
                 isBrakeing = false;
                 isReverse = false;
                 //if (currentSpeed >= -1)
-                    //OnReverseUpdateCarChildPosition();
+                //OnReverseUpdateCarChildPosition();
             }
             else
             {
-                if(currentSpeed >= 1)
+                if (currentSpeed >= 1)
                 {
                     currentSpeed += moveInput * 2 * acceleration * Time.deltaTime;
                     isBrakeing = true;
@@ -166,13 +167,13 @@ public class MyCarController : MonoBehaviour
                     isBrakeing = false;
                     isReverse = true;
                     //if (!blockControl && currentSpeed <= -1)
-                        //OnReverseUpdateCarChildPosition();
+                    //OnReverseUpdateCarChildPosition();
                 }
-                
+
             }
             currentSpeed = Mathf.Clamp(currentSpeed, -maxSpeed * 0.5f, maxSpeed);
         }
-        else if(!isBoosting)
+        else if (!isBoosting)
         {
             currentSpeed = Mathf.Lerp(currentSpeed, 0, deceleration * Time.deltaTime);
             isBrakeing = false;
@@ -209,7 +210,7 @@ public class MyCarController : MonoBehaviour
                 Debug.Log("jump DOWN = " + isGrounded);
             }
             else
-            {                
+            {
                 forward = transform.forward * currentSpeed * Time.deltaTime;
                 // Debug.Log("Forward");
             }
@@ -218,7 +219,7 @@ public class MyCarController : MonoBehaviour
         // myRigidbody.MovePosition(transform.position + forward);
         myRigidbody.AddForce(forward * forceCar, ForceMode.Impulse);
     }
-    
+
     private void HandleSteering()
     {
         float turnInput = Input.GetAxis("Horizontal");
@@ -226,12 +227,12 @@ public class MyCarController : MonoBehaviour
         {
             turnInput = 0;
         }
-        else if(enableOilSpillEffect)
+        else if (enableOilSpillEffect)
         {
             turnInput = oilSlipFactor;
             // turnInput = Mathf.Clamp(turnInput, -1, 1);
         }
-        
+
         // Handle drifting
         if ((Input.GetKey(KeyCode.Space) || enableOilSpillEffect) && (isDrifting || Mathf.Abs(turnInput) > 0.5f) && (isDrifting || currentSpeed > maxSpeed * 0.5f)) // Drift when turning sharply and at higher speeds
         {
@@ -241,14 +242,14 @@ public class MyCarController : MonoBehaviour
             if (currentSpeed > maxSpeed * 0.5)
             {
                 currentSpeed *= 1 - (Mathf.Abs(turnInput) * driftFactor * Time.deltaTime);
-            }            
+            }
         }
         else
         {
             currentSpeed *= 1 - (Mathf.Abs(turnInput) * turnSpeedReductionFactor * Time.deltaTime);
             rotationToDrift = Quaternion.Euler(0, turnInput * turningAngleOnChild, 0);
             myChildCar.localRotation = Quaternion.Lerp(myChildCar.localRotation, rotationToDrift, driftControlWhenNoDrift * Time.deltaTime);
-            isDrifting = false;            
+            isDrifting = false;
         }
 
         carVFX.UpdateTrail(isDrifting);
@@ -263,7 +264,7 @@ public class MyCarController : MonoBehaviour
             Quaternion deltaRotation = Quaternion.Euler(0, currentTurnAngle * Time.fixedDeltaTime, 0);
             // myRigidbody.MoveRotation(myRigidbody.rotation * deltaRotation);
             myRigidbody.rotation = myRigidbody.rotation * deltaRotation;
-        }        
+        }
     }
 
     private void HandleBoost()
@@ -289,7 +290,7 @@ public class MyCarController : MonoBehaviour
 
         // Reset speed after boost duration
         if (isBoosting && Time.time > boostEndTime && boostEndTime != 0)
-        {            
+        {
             maxSpeed /= boostMultiplier;
             currentSpeed = maxSpeed;
             boostEndTime = 0;
@@ -299,16 +300,16 @@ public class MyCarController : MonoBehaviour
             powerUps.AddBoosterPowerUp();
         }
 
-        if(Time.time > nextBoostTime && !isBoosting)
+        if (Time.time > nextBoostTime && !isBoosting)
         {
             MyGameController.instance.UIManager.IsBoostAvailable(true);
         }
     }
 
     private void UpdateWheelPoses()
-    {        
+    {
         foreach (Transform wheel in wheelTransforms)
-        {            
+        {
             // Simple rotation of wheels based on current speed
             wheel.Rotate(Vector3.right, currentSpeed * (360f / (2f * Mathf.PI * 0.3f)) * Time.deltaTime); // Assuming 0.3 is the radius of the wheel
         }
@@ -350,7 +351,7 @@ public class MyCarController : MonoBehaviour
 
     public void UpdateBlockControl(bool control)
     {
-        blockControl = control;        
+        blockControl = control;
     }
 
     public void ResetBoostAmount()
@@ -382,7 +383,7 @@ public class MyCarController : MonoBehaviour
             {
                 currentSpeed *= brakeFactor;
             }
-                        
+
             //Vector3 hitPoint = collision.GetContact(0).point;
             //Vector3 dir = hitPoint - transform.position;
             //collision.gameObject.GetComponent<AITrafficCar>().HideAfterAccident(dir, hitPoint);
@@ -399,7 +400,7 @@ public class MyCarController : MonoBehaviour
     // {
     //     if (collision.gameObject.CompareTag("jump_Platform"))
     //     {
-            
+
     //         // Quaternion deltaRotation = Quaternion.Euler(0, 0, 0);
     //         // myRigidbody.rotation = myRigidbody.rotation * deltaRotation;
     //     }
@@ -408,7 +409,7 @@ public class MyCarController : MonoBehaviour
     bool carChildPivotBack = false;
     public void OnReverseUpdateCarChildPosition(bool _isReverse)
     {
-        if(_isReverse && !carChildPivotBack)
+        if (_isReverse && !carChildPivotBack)
         {
             carChildPivotBack = true;
             Vector3 pos = myChildCar.localPosition;
@@ -419,7 +420,7 @@ public class MyCarController : MonoBehaviour
             box.z = 2.5f;
             boxCollider.center = box;
         }
-        else if(!_isReverse && carChildPivotBack)
+        else if (!_isReverse && carChildPivotBack)
         {
             carChildPivotBack = false;
             Vector3 pos = myChildCar.localPosition;
@@ -447,7 +448,7 @@ public class MyCarController : MonoBehaviour
     bool oilTweeenStarts = false;
     void OilSpillEffect()
     {
-        if(!oilTweeenStarts && enableOilSpillEffect)
+        if (!oilTweeenStarts && enableOilSpillEffect)
         {
             if (currentSpeed > maxSpeed * 0.5f)
             {
@@ -455,7 +456,7 @@ public class MyCarController : MonoBehaviour
                 float valFloat = 0f;
                 float timeRandom = UnityEngine.Random.Range(0.4f, 0.6f);
                 bool isright = timeRandom > 0.5f ? true : false;
-                DOTween.To(() => valFloat, x => valFloat = x, oilSlipInput, timeRandom).SetDelay(isright ? 0: timeRandom).OnUpdate(() => { oilSlipFactor = valFloat; })
+                DOTween.To(() => valFloat, x => valFloat = x, oilSlipInput, timeRandom).SetDelay(isright ? 0 : timeRandom).OnUpdate(() => { oilSlipFactor = valFloat; })
                 .OnComplete(() =>
                 {
                     timeRandom = UnityEngine.Random.Range(0.3f, 0.6f);
@@ -497,7 +498,7 @@ public class MyCarController : MonoBehaviour
 
     private bool jumpEffect = false;
     private void JumpEffectStart()
-    {        
+    {
         if (!blockControl && !isBoosting && currentSpeed > 0)
         {
             jumpEffect = true;
@@ -510,13 +511,13 @@ public class MyCarController : MonoBehaviour
             myRigidbody.useGravity = false;
             // myRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             isInAir = true;
-        }        
+        }
     }
     private void JumpBoostEffectEnd()
     {
         // Reset speed after boost duration
         if (isBoosting && Time.time > boostEndTime && boostEndTime != 0)
-        {            
+        {
             jumpEffect = false;
             maxSpeed /= boostMultiplier;
             currentSpeed = maxSpeed;
@@ -527,9 +528,58 @@ public class MyCarController : MonoBehaviour
             myRigidbody.useGravity = true;
             // myRigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
         }
-        else if(isBoosting && Time.time > boostEndTime-1 && boostEndTime != 0)
+        else if (isBoosting && Time.time > boostEndTime - 1 && boostEndTime != 0)
         {
             myRigidbody.useGravity = true;
+        }
+    }
+
+    private bool cp0, cp1, cp2, cp3, cp4;
+    public void OnCheckPointHit(string cp) // only for grand prix mode
+    {
+        switch (cp)
+        {
+            case "0":
+                cp0 = true;
+                // MyGameController.instance.MyManager.textStartFinish.gameObject.SetActive(false);
+                break;
+            case "1":
+                if (cp0)
+                {
+                    cp1 = true;
+                }
+                break;
+            case "2":
+                if (cp1)
+                {
+                    cp2 = true;
+                }
+                break;
+            case "3":
+                if (cp2)
+                {
+                    cp3 = true;
+                    MyGameController.instance.MyManager.textStartFinish.text = "Finish";
+                    // MyGameController.instance.MyManager.textStartFinish.gameObject.SetActive(true);
+                }
+                break;
+            // case "4":
+            //     if (cp3)
+            //     {
+            //         cp4 = true;
+            //         MyGameController.instance.MyManager.textStartFinish.text = "Finish";
+            //         MyGameController.instance.MyManager.textStartFinish.gameObject.SetActive(true);
+            //     }
+            //     break;
+            default: // finish line
+                if (cp0 && cp1 && cp2 && cp3)
+                {                   
+                    MyGameController.instance.isGameOver = true;
+                    MyGameController.instance.MySoundManager.RaceTrackSound(false);
+                    MyGameController.instance.MyManager.carLambController.UpdateBlockControl(true);
+                    MyGameController.instance.UIManager.ShowGameOver();
+                }
+                break;
         }
     }
 }
