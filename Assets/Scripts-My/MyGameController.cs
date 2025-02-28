@@ -109,6 +109,19 @@ public class MyGameController : MonoBehaviour
         }
     }
 
+    private Popup_ShowMessageOnly popup_ShowMessageOnly;
+    public Popup_ShowMessageOnly Popup_ShowMessageOnly
+    {
+        get
+        {
+            if (popup_ShowMessageOnly == null)
+            {
+                popup_ShowMessageOnly = transform.GetComponentInChildren<Popup_ShowMessageOnly>(true);
+            }
+            return popup_ShowMessageOnly;
+        }
+    }
+
 
 
 

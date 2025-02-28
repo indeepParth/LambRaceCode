@@ -14,6 +14,8 @@ public class PlayFabLogin : MonoBehaviour
 
     public delegate void GSHeartDatails(int heart);
 
+    public delegate void GSBool(bool success);
+
     public void Start()
     {
         if (string.IsNullOrEmpty(PlayFabSettings.staticSettings.TitleId))
@@ -24,20 +26,29 @@ public class PlayFabLogin : MonoBehaviour
             */
             PlayFabSettings.staticSettings.TitleId = "C25EB";
         }
-        var request = new LoginWithCustomIDRequest { CustomId = "ParthUnity", CreateAccount = true };
+        // var request = new LoginWithCustomIDRequest { CustomId = "ParthUnity", CreateAccount = true };
+        // PlayFabClientAPI.LoginWithCustomID(request, OnLoginSuccess, OnLoginFailure);
+    }
+
+    public void LoginWithPlayfab()
+    {
+        var request = new LoginWithCustomIDRequest { CustomId = GetStoredWalletAddress(), CreateAccount = true };
         PlayFabClientAPI.LoginWithCustomID(request, OnLoginSuccess, OnLoginFailure);
     }
 
     private void OnLoginSuccess(LoginResult result)
     {
         Debug.Log("Congratulations, you made your first successful API call!");
-        if(result != null && !result.NewlyCreated)
+        if (result != null && !result.NewlyCreated)
         {
-            FetchPlayerDataFromGS((respoce) =>
-            {
-                Debug.Log("heart = " + respoce);
-                MyGameController.instance.UpdateHeartPoint(respoce);
-            });
+            UpdatePlayerDetails(GetStoredPlayerName(), (respoce) =>
+                {
+                    FetchPlayerDataFromGS((respoce) =>
+                    {
+                        Debug.Log("heart = " + respoce);
+                        MyGameController.instance.UpdateHeartPoint(respoce);
+                    });
+                });
         }
         else
         {
@@ -47,15 +58,52 @@ public class PlayFabLogin : MonoBehaviour
 
     private void OnLoginFailure(PlayFabError error)
     {
-        Debug.LogWarning("Something went wrong with your first API call.  :(");
-        Debug.LogError("Here's some debug information:");
-        Debug.LogError(error.GenerateErrorReport());
+        Debug.LogWarning("Something went wrong with Login address.  :(");
+        MyGameController.instance.Popup_ShowMessageOnly.Init("Something went wrong with Login \n try again later.");
+        MyGameController.instance.Popup_ShowMessageOnly.gameObject.SetActive(true);
     }
 
     ////
     /// <summary>
     /// 
     /// </summary>
+    /// 
+
+    public string GetStoredWalletAddress()
+    {
+        return PlayerPrefs.GetString(Utility.KEY_WALLET_ID);
+    }
+
+    public void StoreWalletAddress(string wallet)
+    {
+        PlayerPrefs.SetString(Utility.KEY_WALLET_ID, wallet);
+    }
+
+    public string GetStoredPlayerName()
+    {
+        return PlayerPrefs.GetString(Utility.KEY_PLAYERNAME);
+    }
+
+    public void StorePlayerName(string name)
+    {
+        PlayerPrefs.SetString(Utility.KEY_PLAYERNAME, name);
+    }
+
+    public void UpdatePlayerDetails(string newName, GSBool callback)
+    {
+        PlayFabClientAPI.UpdateUserTitleDisplayName(new UpdateUserTitleDisplayNameRequest
+        {
+            DisplayName = newName //PlayerPrefs.GetString(NMPhoton.KEY_PLAYERNAME)
+        }, (res) =>
+        {
+            StorePlayerName(newName);
+            callback?.Invoke(true);
+        }, (err) =>
+        {
+            Debug.LogError("UpdatePlayerDetails failed.");
+            callback?.Invoke(false);
+        });
+    }
 
     private static Dictionary<string, UserDataRecord> UserData;
     public void FetchPlayerDataFromGS(GSHeartDatails callback)
