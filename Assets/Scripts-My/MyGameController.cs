@@ -122,6 +122,19 @@ public class MyGameController : MonoBehaviour
         }
     }
 
+    private UILoginPanel uILoginPanel;
+    public UILoginPanel UILoginPanel
+    {
+        get
+        {
+            if (uILoginPanel == null)
+            {
+                uILoginPanel = transform.GetComponentInChildren<UILoginPanel>(true);
+            }
+            return uILoginPanel;
+        }
+    }
+
 
 
 
@@ -132,7 +145,7 @@ public class MyGameController : MonoBehaviour
     public int countDownTime = 120;
     public int increaseTimeReward = 60;
     float t = 0;
-    private int counterUpTime = 0;
+    public int counterUpTime = 0;
 
     public bool isGameOver;
     public bool isGameStart;
@@ -152,10 +165,11 @@ public class MyGameController : MonoBehaviour
             PlayerPrefs.SetInt("heartPoint", value);
         }
     }
-    public void UpdateHeartPointOnPlayfab()
+    public void UpdateHeartPointOnPlayfab(int bestHeart)
     {
         PlayFabLogin.GameWonRewardEvent((respoce) =>
         {
+            PlayFabLogin.SubmitBestHeartOnDropPessanger(bestHeart);
             UpdateHeartPoint(respoce);
         });
     }
@@ -184,6 +198,7 @@ public class MyGameController : MonoBehaviour
         isGameOver = false;
         isGameStart = false;
         countDownTime = timer;
+        counterUpTime = 0;
     }
 
     public void RestartGame()

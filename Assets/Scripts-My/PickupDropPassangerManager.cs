@@ -60,6 +60,8 @@ public class PickupDropPassangerManager : MonoBehaviour
     public int curDropSegmentIndex;
     private List<ExtrusionSegment> extrusionSegment = new List<ExtrusionSegment>();
 
+    private int bestHeart = 0; // in single game collection of heart
+
     bool isActiveNavmesh = false;
     private void Update()
     {
@@ -84,6 +86,7 @@ public class PickupDropPassangerManager : MonoBehaviour
     private void Start()
     {
         directionalArrow.gameObject.SetActive(false);
+        bestHeart = 0;
 
         if (MyGameController.instance.gameMode == GameMode.DateRush)
         {
@@ -381,7 +384,8 @@ public class PickupDropPassangerManager : MonoBehaviour
         MyGameController.instance.MyManager.carLambController.ResetBoostAmount();
         MyGameController.instance.MyManager.carLambController.UpdateBlockControl(false);
         PickupDropPoint.gameObject.SetActive(false);
-        MyGameController.instance.UpdateHeartPointOnPlayfab();
+        bestHeart = bestHeart + 1;
+        MyGameController.instance.UpdateHeartPointOnPlayfab(bestHeart);
     }
 
     private void GetCarLocationOnSpline()

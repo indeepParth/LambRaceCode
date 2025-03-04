@@ -115,6 +115,7 @@ public class UIManager : MonoBehaviour
     {
         MyGameController.instance.gameMode = GameMode.None;
         MyGameController.instance.MySoundManager.RaceTrackSound(false);
+        MyGameController.instance.MyManager.boxCharacterTrigger.CharacterDisableOnSceneHome();
         SceneLoader(0, () =>
         {            
             gameOverPanel.SetActive(false);

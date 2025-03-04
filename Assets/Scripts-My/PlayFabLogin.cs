@@ -28,6 +28,14 @@ public class PlayFabLogin : MonoBehaviour
         }
         // var request = new LoginWithCustomIDRequest { CustomId = "ParthUnity", CreateAccount = true };
         // PlayFabClientAPI.LoginWithCustomID(request, OnLoginSuccess, OnLoginFailure);
+        if (!string.IsNullOrEmpty(GetStoredWalletAddress()))
+        {
+            LoginWithPlayfab();
+        }
+        else
+        {
+            MyGameController.instance.UILoginPanel.gameObject.SetActive(true);
+        }
     }
 
     public void LoginWithPlayfab()
@@ -38,16 +46,24 @@ public class PlayFabLogin : MonoBehaviour
 
     private void OnLoginSuccess(LoginResult result)
     {
-        Debug.Log("Congratulations, you made your first successful API call!");
-        if (result != null && !result.NewlyCreated)
+        MyGameController.instance.UILoginPanel.gameObject.SetActive(false);
+        // Debug.Log("Congratulations, you made your first successful API call!");
+        if (result != null) // && !result.NewlyCreated)
         {
             UpdatePlayerDetails(GetStoredPlayerName(), (respoce) =>
                 {
-                    FetchPlayerDataFromGS((respoce) =>
+                    if (!result.NewlyCreated)
                     {
-                        Debug.Log("heart = " + respoce);
-                        MyGameController.instance.UpdateHeartPoint(respoce);
-                    });
+                        FetchPlayerDataFromGS((respoce) =>
+                        {
+                            Debug.Log("heart = " + respoce);
+                            MyGameController.instance.UpdateHeartPoint(respoce);
+                        });
+                    }
+                    else
+                    {
+                        MyGameController.instance.UpdateHeartPoint(0);
+                    }
                 });
         }
         else
@@ -61,6 +77,7 @@ public class PlayFabLogin : MonoBehaviour
         Debug.LogWarning("Something went wrong with Login address.  :(");
         MyGameController.instance.Popup_ShowMessageOnly.Init("Something went wrong with Login \n try again later.");
         MyGameController.instance.Popup_ShowMessageOnly.gameObject.SetActive(true);
+        MyGameController.instance.UILoginPanel.gameObject.SetActive(true);
     }
 
     ////
@@ -145,6 +162,46 @@ public class PlayFabLogin : MonoBehaviour
             Debug.LogError("GameWonRewardEvent failed.");
             Debug.LogError(error.GenerateErrorReport());
             callback?.Invoke(0);
+        });
+    }
+    public void SubmitBestHeartOnDropPessanger(int heart) //, GSHeartDatails callback) // for Grand prix mode only
+    {
+        PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+        {
+            FunctionName = "BestHeartOnDropPessanger",
+            FunctionParameter = new { bestHeart = heart.ToString() }
+        }, (result) =>
+        {
+            // JsonObject jsonResult = (JsonObject)result.FunctionResult;
+            // object heart;
+            // jsonResult.TryGetValue("lapCounter", out heart);
+            // int.TryParse(heart.ToString(), out int w);
+            // callback?.Invoke(w);
+        }, (error) =>
+        {
+            Debug.LogError("LapTime On GameOver failed.");
+            // Debug.LogError(error.GenerateErrorReport());
+            // callback?.Invoke(0);
+        });
+    }
+    public void SubmitLapsTimeOnGameOver(int _lapTime) //, GSHeartDatails callback) // for Grand prix mode only
+    {
+        PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+        {
+            FunctionName = "LapTimeOnGameOver",
+            FunctionParameter = new { lapTime = _lapTime.ToString() }
+        }, (result) =>
+        {
+            // JsonObject jsonResult = (JsonObject)result.FunctionResult;
+            // object heart;
+            // jsonResult.TryGetValue("lapCounter", out heart);
+            // int.TryParse(heart.ToString(), out int w);
+            // callback?.Invoke(w);
+        }, (error) =>
+        {
+            Debug.LogError("LapTime On GameOver failed.");
+            // Debug.LogError(error.GenerateErrorReport());
+            // callback?.Invoke(0);
         });
     }
 

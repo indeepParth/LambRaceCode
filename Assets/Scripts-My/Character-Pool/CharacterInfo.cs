@@ -20,7 +20,10 @@ public class CharacterInfo : MonoBehaviour
 
     private void LateUpdate()
     {
-        if(isPassanger && !MyGameController.instance.MyManager.pickupDropPassangerManager.lookAtCar)
+        // if (!MyGameController.instance.isGameStart)
+        //     return;
+            
+        if (isPassanger && !MyGameController.instance.MyManager.pickupDropPassangerManager.lookAtCar)
         {
             return;
         }

@@ -20,6 +20,9 @@ public class MyManager : MonoBehaviour
     public ParticleSystem speedEffectParticle;
     public Camera mainCamera;
 
+    [System.NonSerialized]
+    public BoxCharacterTrigger boxCharacterTrigger;
+
     public GameObject grandPrixCheckPoints;
     public TextMeshPro textStartFinish; // for grand prix mode only
 

@@ -573,11 +573,12 @@ public class MyCarController : MonoBehaviour
             //     break;
             default: // finish line
                 if (cp0 && cp1 && cp2 && cp3)
-                {                   
+                {
                     MyGameController.instance.isGameOver = true;
                     MyGameController.instance.MySoundManager.RaceTrackSound(false);
                     MyGameController.instance.MyManager.carLambController.UpdateBlockControl(true);
                     MyGameController.instance.UIManager.ShowGameOver();
+                    MyGameController.instance.PlayFabLogin.SubmitLapsTimeOnGameOver(MyGameController.instance.counterUpTime);
                 }
                 break;
         }

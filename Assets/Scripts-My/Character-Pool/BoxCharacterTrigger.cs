@@ -20,6 +20,7 @@ public class BoxCharacterTrigger : MonoBehaviour
     {
         if (other.gameObject.CompareTag("car"))
         {
+            MyGameController.instance.MyManager.boxCharacterTrigger = this;
             foreach (SpawnCharacter sp in spawnPoints)
             {
                 sp.gameObject.SetActive(true);
@@ -28,7 +29,7 @@ public class BoxCharacterTrigger : MonoBehaviour
             // int boxIndx = boxIndex != 0 ? boxIndex - 1 : CharacterPoolManager.instance.boxCharacterTriggers.Count - 1;
         }
 
-        
+
     }
 
     private void OnTriggerExit(Collider other)
@@ -40,6 +41,15 @@ public class BoxCharacterTrigger : MonoBehaviour
                 sp.gameObject.SetActive(false);
                 sp.CharacterDisable();
             }
+        }
+    }
+    
+    public void CharacterDisableOnSceneHome()
+    {
+        foreach (SpawnCharacter sp in spawnPoints)
+        {
+            sp.gameObject.SetActive(false);
+            sp.CharacterDisable();
         }
     }
 }
