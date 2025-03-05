@@ -205,11 +205,11 @@ public class PlayFabLogin : MonoBehaviour
         });
     }
 
-    List<MyPlayerDetails> leaderloardItems = new List<MyPlayerDetails>();
+    // List<MyPlayerDetails> leaderloardItems = new List<MyPlayerDetails>();
     string rank;
     string playerName;
     string wins;
-    public void FetchLeaderboardDataFromGS(GSPlayerDataList callback)
+    public void FetchLeaderboard_DateRush_TotalScore(GSPlayerDataList callback)
     {
         PlayFabClientAPI.GetLeaderboard(
                 // Request
@@ -222,13 +222,118 @@ public class PlayFabLogin : MonoBehaviour
                 // Success
                 (GetLeaderboardResult result) =>
                 {
+                    List<MyPlayerDetails> leaderloardItems = new List<MyPlayerDetails>();
                     leaderloardItems.Clear();
                     foreach (PlayerLeaderboardEntry entry in result.Leaderboard)
                     {
-                        rank = (entry.Position + 1).ToString();
-                        playerName = entry.DisplayName;
-                        wins = entry.StatValue.ToString();
-                        leaderloardItems.Add(new MyPlayerDetails(rank, playerName, wins));
+                        // rank = (entry.Position + 1).ToString();
+                        // playerName = entry.DisplayName;
+                        // wins = entry.StatValue.ToString();
+                        leaderloardItems.Add(new MyPlayerDetails((entry.Position + 1).ToString()
+                        , entry.DisplayName, entry.StatValue.ToString()));
+                    }
+                    callback?.Invoke(leaderloardItems);
+                },
+                // Failure
+                (PlayFabError error) =>
+                {
+                    Debug.Log("Error Retrieving Leaderboard Data...");
+                    Debug.LogError(error.GenerateErrorReport());
+                    callback?.Invoke(null);
+                }
+                );
+    }
+    public void FetchLeaderboard_DateRush_BestScore(GSPlayerDataList callback)
+    {
+        PlayFabClientAPI.GetLeaderboard(
+                // Request
+                new GetLeaderboardRequest
+                {
+                    StatisticName = "BestHeart",
+                    StartPosition = 0,
+                    MaxResultsCount = 100
+                },
+                // Success
+                (GetLeaderboardResult result) =>
+                {
+                    List<MyPlayerDetails> leaderloardItems = new List<MyPlayerDetails>();
+                    leaderloardItems.Clear();
+                    foreach (PlayerLeaderboardEntry entry in result.Leaderboard)
+                    {
+                        // rank = (entry.Position + 1).ToString();
+                        // playerName = entry.DisplayName;
+                        // wins = entry.StatValue.ToString();
+                        leaderloardItems.Add(new MyPlayerDetails((entry.Position + 1).ToString()
+                        , entry.DisplayName, entry.StatValue.ToString()));
+                    }
+                    callback?.Invoke(leaderloardItems);
+                },
+                // Failure
+                (PlayFabError error) =>
+                {
+                    Debug.Log("Error Retrieving Leaderboard Data...");
+                    Debug.LogError(error.GenerateErrorReport());
+                    callback?.Invoke(null);
+                }
+                );
+    }
+
+    public void FetchLeaderboard_GrandPrix_TotalScore(GSPlayerDataList callback)
+    {
+        PlayFabClientAPI.GetLeaderboard(
+                // Request
+                new GetLeaderboardRequest
+                {
+                    StatisticName = "LapCounter",
+                    StartPosition = 0,
+                    MaxResultsCount = 100
+                },
+                // Success
+                (GetLeaderboardResult result) =>
+                {
+                    List<MyPlayerDetails> leaderloardItems = new List<MyPlayerDetails>();
+                    leaderloardItems.Clear();
+                    foreach (PlayerLeaderboardEntry entry in result.Leaderboard)
+                    {
+                        // rank = (entry.Position + 1).ToString();
+                        // playerName = entry.DisplayName;
+                        // wins = entry.StatValue.ToString();
+                        leaderloardItems.Add(new MyPlayerDetails((entry.Position + 1).ToString()
+                        , entry.DisplayName, entry.StatValue.ToString()));
+                    }
+                    callback?.Invoke(leaderloardItems);
+                },
+                // Failure
+                (PlayFabError error) =>
+                {
+                    Debug.Log("Error Retrieving Leaderboard Data...");
+                    Debug.LogError(error.GenerateErrorReport());
+                    callback?.Invoke(null);
+                }
+                );
+    }
+    public void FetchLeaderboard_GrandPrix_BestScore(GSPlayerDataList callback)
+    {
+        PlayFabClientAPI.GetLeaderboard(
+                // Request
+                new GetLeaderboardRequest
+                {
+                    StatisticName = "LapTime",
+                    StartPosition = 0,
+                    MaxResultsCount = 100
+                },
+                // Success
+                (GetLeaderboardResult result) =>
+                {
+                    List<MyPlayerDetails> leaderloardItems = new List<MyPlayerDetails>();
+                    leaderloardItems.Clear();
+                    foreach (PlayerLeaderboardEntry entry in result.Leaderboard)
+                    {
+                        // rank = (entry.Position + 1).ToString();
+                        // playerName = entry.DisplayName;
+                        // wins = entry.StatValue.ToString();
+                        leaderloardItems.Add(new MyPlayerDetails((entry.Position + 1).ToString()
+                        , entry.DisplayName, entry.StatValue.ToString()));
                     }
                     callback?.Invoke(leaderloardItems);
                 },

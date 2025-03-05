@@ -13,6 +13,7 @@ public class DataLeaderBoard
 
 public class Panel_Leaderboard : MonoBehaviour, IEnhancedScrollerDelegate
 {
+    public bool isBestScorePanel;
     private SmallList<DataLeaderBoard> _data = new SmallList<DataLeaderBoard>();
     public EnhancedScroller scroller;
     public EnhancedScrollerCellView cellViewPrefab;
@@ -30,57 +31,74 @@ public class Panel_Leaderboard : MonoBehaviour, IEnhancedScrollerDelegate
         // tell the scroller that this script will be its delegate
         scroller.Delegate = this;
 
-        LoadLargeData();
+        // LoadLargeData();
     }
 
-    private void LoadLargeData()
+    public void LoadLeaderboardData(LeaderboardType type)
     {
         scrollViewLoading.ShowLoading();
         _data.Clear();
-        MyGameController.instance.PlayFabLogin.FetchLeaderboardDataFromGS((responce) =>
+        if (isBestScorePanel)
         {
-            if(responce != null)
+            if(type == LeaderboardType.dateRush)
             {
-                for (int i = 0; i < responce.Count; i++)
+                MyGameController.instance.PlayFabLogin.FetchLeaderboard_DateRush_BestScore((responce) =>
                 {
-                    if (i > 100)
-                    {
-                        break;
-                    }  
-                    MyPlayerDetails item = responce[i];
-                    _data.Add(new DataLeaderBoard()
-                    {
-                        rank = item.rank,
-                        name = item.name, 
-                        heart = item.heart
-                    });
-                    _data.Add(new DataLeaderBoard()
-                    {
-                        rank = item.rank,
-                        name = item.name,
-                        heart = item.heart
-                    });
-                    _data.Add(new DataLeaderBoard()
-                    {
-                        rank = item.rank,
-                        name = item.name,
-                        heart = item.heart
-                    });
-                    _data.Add(new DataLeaderBoard()
-                    {
-                        rank = item.rank,
-                        name = item.name,
-                        heart = item.heart
-                    });
-                }
-                scroller.ReloadData();
+                    ResponceLeaderboard(responce);
+                });
             }
             else
             {
-                scrollViewLoading.ScrollBarEmptyText("Something went wrong...", true);
+                MyGameController.instance.PlayFabLogin.FetchLeaderboard_GrandPrix_BestScore((responce) =>
+                {
+                    ResponceLeaderboard(responce);
+                });
             }
-            scrollViewLoading.HideLoading();
-        });
+        }
+        else
+        {
+            if (type == LeaderboardType.dateRush)
+            {
+                MyGameController.instance.PlayFabLogin.FetchLeaderboard_DateRush_TotalScore((responce) =>
+                {
+                    ResponceLeaderboard(responce);
+                });
+            }
+            else
+            {
+                MyGameController.instance.PlayFabLogin.FetchLeaderboard_GrandPrix_TotalScore((responce) =>
+                {
+                    ResponceLeaderboard(responce);
+                });
+            }
+        }
+        
+    }
+    private void ResponceLeaderboard(List<MyPlayerDetails> responce)
+    {
+        if (responce != null)
+        {
+            for (int i = 0; i < responce.Count; i++)
+            {
+                if (i > 100)
+                {
+                    break;
+                }
+                MyPlayerDetails item = responce[i];
+                _data.Add(new DataLeaderBoard()
+                {
+                    rank = item.rank,
+                    name = item.name,
+                    heart = item.heart
+                });
+            }
+            scroller.ReloadData();
+        }
+        else
+        {
+            scrollViewLoading.ScrollBarEmptyText("Something went wrong...", true);
+        }
+        scrollViewLoading.HideLoading();
     }
 
     public void Btn_HideLeaderboard()
