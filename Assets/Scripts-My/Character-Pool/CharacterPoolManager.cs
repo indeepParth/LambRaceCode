@@ -34,23 +34,29 @@ public class CharacterPoolManager : MonoBehaviour
         GameObject _character = null;
         if (spawn.isBeachChar)
         {
-            foreach(CharacterInfo chara in poolBeachCharacter)
+            if (poolBeachCharacter != null && poolBeachCharacter.Count > 0)
             {
-                if(chara.indexPref == spawn.randomChar && !chara.gameObject.activeInHierarchy)
+                foreach (CharacterInfo chara in poolBeachCharacter)
                 {
-                    _character = chara.gameObject;
-                    break;
+                    if (chara != null && chara.indexPref == spawn.randomChar && !chara.gameObject.activeInHierarchy)
+                    {
+                        _character = chara.gameObject;
+                        break;
+                    }
                 }
             }
         }
         else
         {
-            foreach (CharacterInfo chara in poolCityCharacters)
+            if (poolCityCharacters != null && poolCityCharacters.Count > 0)
             {
-                if (chara.indexPref == spawn.randomChar && !chara.gameObject.activeInHierarchy)
+                foreach (CharacterInfo chara in poolCityCharacters)
                 {
-                    _character = chara.gameObject;
-                    break;
+                    if (chara != null && chara.indexPref == spawn.randomChar && !chara.gameObject.activeInHierarchy)
+                    {
+                        _character = chara.gameObject;
+                        break;
+                    }
                 }
             }
         }
