@@ -92,7 +92,9 @@ public class Panel_Leaderboard : MonoBehaviour, IEnhancedScrollerDelegate
                     heart = item.heart
                 });
             }
+            var scrollPosition = scroller.ScrollPosition;
             scroller.ReloadData();
+            scroller.ScrollPosition = scrollPosition;
         }
         else
         {

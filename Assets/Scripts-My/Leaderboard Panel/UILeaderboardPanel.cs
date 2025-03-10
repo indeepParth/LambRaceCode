@@ -20,7 +20,7 @@ public class UILeaderboardPanel : MonoBehaviour
 
     void Awake()
     {
-        Btn_leaderboard(0);
+        // Btn_leaderboard(0);
     }
 
     public void Btn_leaderboard(int type)

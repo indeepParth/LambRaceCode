@@ -214,5 +214,6 @@ public class UIManager : MonoBehaviour
     public void Btn_ShowLeaderboard()
     {
         MyGameController.instance.Panel_Leaderboard.gameObject.SetActive(true);
+        MyGameController.instance.Panel_Leaderboard.Btn_leaderboard(0);
     }
 }
