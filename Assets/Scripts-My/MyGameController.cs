@@ -96,14 +96,14 @@ public class MyGameController : MonoBehaviour
         }
     }
 
-    private Panel_Leaderboard panel_Leaderboard;
-    public Panel_Leaderboard Panel_Leaderboard
+    private UILeaderboardPanel panel_Leaderboard;
+    public UILeaderboardPanel Panel_Leaderboard
     {
         get
         {
             if (panel_Leaderboard == null)
             {
-                panel_Leaderboard = transform.GetComponentInChildren<Panel_Leaderboard>(true);
+                panel_Leaderboard = transform.GetComponentInChildren<UILeaderboardPanel>(true);
             }
             return panel_Leaderboard;
         }

@@ -17,7 +17,7 @@ public class UILeaderboardPanel : MonoBehaviour
     public Panel_Leaderboard totalScore_Leaderboard;
     public Image imgBtn_dateRush;
     public Image imgBtn_grandPrix;
-    
+
     void Awake()
     {
         Btn_leaderboard(0);
@@ -39,5 +39,10 @@ public class UILeaderboardPanel : MonoBehaviour
                 imgBtn_grandPrix.DOFade(1, 0.2f);
                 break;
         }
+    }
+
+    public void Btn_HideLeaderboard()
+    {
+        gameObject.SetActive(false);
     }
 }

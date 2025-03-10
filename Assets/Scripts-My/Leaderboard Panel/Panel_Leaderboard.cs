@@ -101,11 +101,6 @@ public class Panel_Leaderboard : MonoBehaviour, IEnhancedScrollerDelegate
         scrollViewLoading.HideLoading();
     }
 
-    public void Btn_HideLeaderboard()
-    {
-        gameObject.SetActive(false);
-    }
-
     #region EnhancedScroller Handlers
 
     /// <summary>
