@@ -65,6 +65,7 @@ public class UIManager : MonoBehaviour
     {
         // MyGameController.instance.freeMode = true;
         MyGameController.instance.gameMode = GameMode.FreeRide;
+        MyGameController.instance.MySoundManager.BackgroundOnHomeSound(false);
         SceneLoader(1, () =>
         {
             MyGameController.instance.StartGame();
@@ -81,6 +82,7 @@ public class UIManager : MonoBehaviour
     {
         // MyGameController.instance.freeMode = true;
         MyGameController.instance.gameMode = GameMode.GrandPrix;
+        MyGameController.instance.MySoundManager.BackgroundOnHomeSound(false);
         SceneLoader(1, () =>
         {
             MyGameController.instance.StartGame();
@@ -99,6 +101,7 @@ public class UIManager : MonoBehaviour
     {
         // MyGameController.instance.freeMode = false;
         MyGameController.instance.gameMode = GameMode.DateRush;
+        MyGameController.instance.MySoundManager.BackgroundOnHomeSound(false);
         SceneLoader(1, () =>
         {
             MyGameController.instance.StartGame();
@@ -114,16 +117,17 @@ public class UIManager : MonoBehaviour
     public void Btn_HomeOnGameOver()
     {
         MyGameController.instance.gameMode = GameMode.None;
-        MyGameController.instance.MySoundManager.RaceTrackSound(false);
+        MyGameController.instance.MySoundManager.RaceTrackSound(false);        
         MyGameController.instance.MyManager.boxCharacterTrigger.CharacterDisableOnSceneHome();
         SceneLoader(0, () =>
-        {            
+        {
             gameOverPanel.SetActive(false);
             gameDateRushPanel.SetActive(false);
             gameFreeRidePanel.SetActive(false);
             gameGrandPrixPanel.SetActive(false);
             homePanel.SetActive(true);
             IsBoostAvailable(false);
+            MyGameController.instance.MySoundManager.BackgroundOnHomeSound(true);
         });
     }
     //
