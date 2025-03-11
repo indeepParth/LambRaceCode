@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using PlayFab.Json;
 using Unity.VisualScripting;
+using System.Linq;
 
 public class PlayFabLogin : MonoBehaviour
 {
@@ -325,14 +326,18 @@ public class PlayFabLogin : MonoBehaviour
                 // Success
                 (GetLeaderboardResult result) =>
                 {
+                    List<PlayerLeaderboardEntry> leaderloardItemsAsending = new List<PlayerLeaderboardEntry>();
+                    leaderloardItemsAsending = result.Leaderboard.OrderBy(x => x.StatValue).ToList();
+
                     List<MyPlayerDetails> leaderloardItems = new List<MyPlayerDetails>();
                     leaderloardItems.Clear();
-                    foreach (PlayerLeaderboardEntry entry in result.Leaderboard)
+                    for (int i = 0; i < leaderloardItemsAsending.Count; i++)
                     {
+                        PlayerLeaderboardEntry entry = leaderloardItemsAsending[i];
                         // rank = (entry.Position + 1).ToString();
                         // playerName = entry.DisplayName;
                         // wins = entry.StatValue.ToString();
-                        leaderloardItems.Add(new MyPlayerDetails((entry.Position + 1).ToString()
+                        leaderloardItems.Add(new MyPlayerDetails((i + 1).ToString()
                         , entry.DisplayName, entry.StatValue.ToString()));
                     }
                     callback?.Invoke(leaderloardItems);
