@@ -22,11 +22,13 @@ public class CharacterInfo : MonoBehaviour
     {
         // if (!MyGameController.instance.isGameStart)
         //     return;
+        if (MyGameController.instance.gameMode == GameMode.None)
+            return;
             
         if (isPassanger && !MyGameController.instance.MyManager.pickupDropPassangerManager.lookAtCar)
-        {
-            return;
-        }
+            {
+                return;
+            }
 
         float distance = Vector3.Distance(transform.position, MyGameController.instance.MyManager.carLamb.position);
         if(distance < distToLook)

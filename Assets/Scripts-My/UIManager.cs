@@ -155,6 +155,7 @@ public class UIManager : MonoBehaviour
                 gameFreeRidePanel.SetActive(true);
                 gameDateRushPanel.SetActive(false);
                 gameGrandPrixPanel.SetActive(false);
+                MyGameController.instance.MyManager.grandPrixCheckPoints.SetActive(false);
             }
             else if (MyGameController.instance.gameMode == GameMode.GrandPrix)
             {
@@ -170,6 +171,7 @@ public class UIManager : MonoBehaviour
                 gameFreeRidePanel.SetActive(false);
                 gameDateRushPanel.SetActive(true);
                 gameGrandPrixPanel.SetActive(false);
+                MyGameController.instance.MyManager.grandPrixCheckPoints.SetActive(false);
             }
         });
     }
