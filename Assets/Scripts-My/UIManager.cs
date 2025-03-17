@@ -74,6 +74,7 @@ public class UIManager : MonoBehaviour
             gameGrandPrixPanel.SetActive(false);
             homePanel.SetActive(false);
             IsBoostAvailable(false);
+            MyGameController.instance.MyManager.textStartFinish.text = "FREE RIDE";
             MyGameController.instance.MyManager.grandPrixCheckPoints.SetActive(false);
         });
     }
@@ -91,8 +92,8 @@ public class UIManager : MonoBehaviour
             gameGrandPrixPanel.SetActive(true);
             homePanel.SetActive(false);
             IsBoostAvailable(false);
-            MyGameController.instance.MyManager.textStartFinish.text = "START";
-            MyGameController.instance.MyManager.textStartFinish.gameObject.SetActive(true);
+            MyGameController.instance.MyManager.textStartFinish.text = "GRAND PRIX";
+            // MyGameController.instance.MyManager.textStartFinish.gameObject.SetActive(true);
             MyGameController.instance.MyManager.grandPrixCheckPoints.SetActive(true);
         });
     }
@@ -110,6 +111,7 @@ public class UIManager : MonoBehaviour
             gameGrandPrixPanel.SetActive(false);
             homePanel.SetActive(false);
             IsBoostAvailable(false);
+            MyGameController.instance.MyManager.textStartFinish.text = "DATE RUSH";
             MyGameController.instance.MyManager.grandPrixCheckPoints.SetActive(false);
         });
     }
