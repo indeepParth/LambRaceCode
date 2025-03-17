@@ -18,6 +18,8 @@ public class UILoginPanel : MonoBehaviour
     {
         obj_invalidName.SetActive(false);
         obj_invalidWallet.SetActive(false);
+        textPlayerName.text = "";
+        textWalletAddress.text = "";
     }
 
     public void Btn_Login()

@@ -44,7 +44,7 @@ public class UIManager : MonoBehaviour
     public void SceneLoader(int index, UIScreenBlend.UISVoid callback = null)
     {
         UIScreenBlend.Instance.DarkIn(() =>
-        {            
+        {
             SceneManager.LoadSceneAsync(index).completed += (obj) =>
             {
                 MyGameController.instance.ResetGame();
@@ -117,7 +117,7 @@ public class UIManager : MonoBehaviour
     public void Btn_HomeOnGameOver()
     {
         MyGameController.instance.gameMode = GameMode.None;
-        MyGameController.instance.MySoundManager.RaceTrackSound(false);        
+        MyGameController.instance.MySoundManager.RaceTrackSound(false);
         MyGameController.instance.MyManager.boxCharacterTrigger.CharacterDisableOnSceneHome();
         SceneLoader(0, () =>
         {
@@ -159,7 +159,7 @@ public class UIManager : MonoBehaviour
                 gameFreeRidePanel.SetActive(false); gameDateRushPanel.SetActive(true);
             }
         });
-    }    
+    }
 
     public void ShowGameOver()
     {
@@ -175,17 +175,17 @@ public class UIManager : MonoBehaviour
 
         IsBoostAvailable(false);
         boostReactionAnimPlaying = true;
-        img_BoostReaction.DOAnchorPosX(150, 0).OnComplete(() => 
+        img_BoostReaction.DOAnchorPosX(150, 0).OnComplete(() =>
         {
             img_BoostReaction.gameObject.SetActive(true);
-            img_BoostReaction.DOAnchorPosX(-10, 0.5f).SetEase(Ease.InOutExpo).OnComplete(() => 
+            img_BoostReaction.DOAnchorPosX(-10, 0.5f).SetEase(Ease.InOutExpo).OnComplete(() =>
             {
                 MyGameController.instance.MySoundManager.PlayWohooo();
                 img_BoostReaction.DOAnchorPosX(150, 0.5f).SetDelay(1.5f).SetEase(Ease.InOutExpo).OnComplete(() =>
                 {
                     img_BoostReaction.gameObject.SetActive(false);
                     boostReactionAnimPlaying = false;
-                });                
+                });
             });
         });
 
@@ -193,13 +193,13 @@ public class UIManager : MonoBehaviour
 
     public void IsBoostAvailable(bool _boostAvailable)
     {
-        if(_boostAvailable && !boostAvailable)
+        if (_boostAvailable && !boostAvailable)
         {
             boostAvailable = true;
             img_BoostAvailable.DOAnchorPosX(-10, 0.5f).SetEase(Ease.InOutExpo);
             MyGameController.instance.MyCarStateUI.ResetBoostWhenAvailable();
         }
-        else if(!_boostAvailable)
+        else if (!_boostAvailable)
         {
             boostAvailable = false;
             img_BoostAvailable.DOAnchorPosX(150, 0.5f).SetEase(Ease.InOutExpo);
@@ -215,5 +215,14 @@ public class UIManager : MonoBehaviour
     {
         MyGameController.instance.Panel_Leaderboard.gameObject.SetActive(true);
         MyGameController.instance.Panel_Leaderboard.Btn_leaderboard(0);
+    }
+
+    public void Btn_LogOut()
+    {
+        PlayerPrefs.DeleteAll();
+        SceneLoader(0, () =>
+        {
+            MyGameController.instance.ForceLogin();
+        });
     }
 }

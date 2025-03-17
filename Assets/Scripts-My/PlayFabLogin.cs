@@ -19,24 +19,25 @@ public class PlayFabLogin : MonoBehaviour
 
     public void Start()
     {
-        if (string.IsNullOrEmpty(PlayFabSettings.staticSettings.TitleId))
-        {
-            /*
-            Please change the titleId below to your own titleId from PlayFab Game Manager.
-            If you have already set the value in the Editor Extensions, this can be skipped.
-            */
-            PlayFabSettings.staticSettings.TitleId = "C25EB";
-        }
+        // if (string.IsNullOrEmpty(PlayFabSettings.staticSettings.TitleId))
+        // {
+        //     /*
+        //     Please change the titleId below to your own titleId from PlayFab Game Manager.
+        //     If you have already set the value in the Editor Extensions, this can be skipped.
+        //     */
+        //     PlayFabSettings.staticSettings.TitleId = "C25EB";
+        // }
         // var request = new LoginWithCustomIDRequest { CustomId = "ParthUnity", CreateAccount = true };
         // PlayFabClientAPI.LoginWithCustomID(request, OnLoginSuccess, OnLoginFailure);
-        if (!string.IsNullOrEmpty(GetStoredWalletAddress()))
-        {
-            LoginWithPlayfab();
-        }
-        else
-        {
-            MyGameController.instance.UILoginPanel.gameObject.SetActive(true);
-        }
+
+        // if (!string.IsNullOrEmpty(GetStoredWalletAddress()))
+        // {
+        //     LoginWithPlayfab();
+        // }
+        // else
+        // {
+        //     MyGameController.instance.UILoginPanel.gameObject.SetActive(true);
+        // }
     }
 
     public void LoginWithPlayfab()

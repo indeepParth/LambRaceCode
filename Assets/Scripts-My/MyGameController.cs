@@ -192,6 +192,23 @@ public class MyGameController : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    
+    void Start()
+    {
+        ForceLogin();
+    }
+
+    public void ForceLogin()
+    {
+        if (!string.IsNullOrEmpty(PlayFabLogin.GetStoredWalletAddress()))
+        {
+            PlayFabLogin.LoginWithPlayfab();
+        }
+        else
+        {
+            UILoginPanel.gameObject.SetActive(true);
+        }
+    }
 
     public void ResetGame()
     {
