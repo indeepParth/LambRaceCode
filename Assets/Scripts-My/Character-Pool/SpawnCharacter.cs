@@ -24,7 +24,8 @@ public class SpawnCharacter : MonoBehaviour
                     if (obj.Status == AsyncOperationStatus.Succeeded)
                     {
                         _character = obj.Result;
-                        _character.transform.localScale = modelScale;
+                        if (_character != null)
+                            _character.transform.localScale = modelScale;
                         CharacterInfo _chara = obj.Result.GetComponent<CharacterInfo>();
                         CharacterPoolManager.instance.poolBeachCharacter.Add(_chara);
                     }

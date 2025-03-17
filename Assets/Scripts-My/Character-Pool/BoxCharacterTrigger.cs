@@ -48,8 +48,11 @@ public class BoxCharacterTrigger : MonoBehaviour
     {
         foreach (SpawnCharacter sp in spawnPoints)
         {
-            sp.gameObject.SetActive(false);
-            sp.CharacterDisable();
+            if (sp != null)
+            {
+                sp.gameObject.SetActive(false);
+                sp.CharacterDisable();
+            }
         }
     }
 }

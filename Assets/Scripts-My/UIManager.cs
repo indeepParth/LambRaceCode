@@ -152,11 +152,24 @@ public class UIManager : MonoBehaviour
             gameOverPanel.SetActive(false);
             if (MyGameController.instance.gameMode == GameMode.FreeRide)
             {
-                gameFreeRidePanel.SetActive(true); gameDateRushPanel.SetActive(false);
+                gameFreeRidePanel.SetActive(true);
+                gameDateRushPanel.SetActive(false);
+                gameGrandPrixPanel.SetActive(false);
             }
-            else
+            else if (MyGameController.instance.gameMode == GameMode.GrandPrix)
             {
-                gameFreeRidePanel.SetActive(false); gameDateRushPanel.SetActive(true);
+                UpdateCounterUpTimer(0);
+                gameFreeRidePanel.SetActive(false);
+                gameDateRushPanel.SetActive(false);
+                gameGrandPrixPanel.SetActive(true);
+                MyGameController.instance.MyManager.grandPrixCheckPoints.SetActive(true);
+            }
+            else if (MyGameController.instance.gameMode == GameMode.DateRush)
+            {
+                UpdateCountDownTimer(MyGameController.instance.countDownTime);
+                gameFreeRidePanel.SetActive(false);
+                gameDateRushPanel.SetActive(true);
+                gameGrandPrixPanel.SetActive(false);
             }
         });
     }
@@ -164,6 +177,8 @@ public class UIManager : MonoBehaviour
     public void ShowGameOver()
     {
         gameDateRushPanel.SetActive(false);
+        gameFreeRidePanel.SetActive(false);
+        gameGrandPrixPanel.SetActive(false);
         gameOverPanel.SetActive(true);
         MyGameController.instance.MyManager.pickupDropPassangerManager.PickupDropPoint.SetActive(false);
     }
