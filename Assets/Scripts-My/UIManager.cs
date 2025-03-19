@@ -68,7 +68,8 @@ public class UIManager : MonoBehaviour
         MyGameController.instance.MySoundManager.BackgroundOnHomeSound(false);
         SceneLoader(1, () =>
         {
-            MyGameController.instance.StartGame();
+            // MyGameController.instance.StartGame();
+            MyGameController.instance.Popup_GameInstructionAtEveryStart.gameObject.SetActive(true);
             gameFreeRidePanel.SetActive(true);
             gameDateRushPanel.SetActive(false);
             gameGrandPrixPanel.SetActive(false);
@@ -86,13 +87,14 @@ public class UIManager : MonoBehaviour
         MyGameController.instance.MySoundManager.BackgroundOnHomeSound(false);
         SceneLoader(1, () =>
         {
-            MyGameController.instance.StartGame();
+            // MyGameController.instance.StartGame();
+            MyGameController.instance.Popup_GameInstructionAtEveryStart.gameObject.SetActive(true);
             gameFreeRidePanel.SetActive(false);
             gameDateRushPanel.SetActive(false);
             gameGrandPrixPanel.SetActive(true);
             homePanel.SetActive(false);
             IsBoostAvailable(false);
-            MyGameController.instance.MyManager.textStartFinish.text = "GRAND PRIX";
+            MyGameController.instance.MyManager.textStartFinish.text = "<sprite=1> GRAND PRIX <sprite=1>";
             // MyGameController.instance.MyManager.textStartFinish.gameObject.SetActive(true);
             MyGameController.instance.MyManager.grandPrixCheckPoints.SetActive(true);
         });
@@ -105,13 +107,14 @@ public class UIManager : MonoBehaviour
         MyGameController.instance.MySoundManager.BackgroundOnHomeSound(false);
         SceneLoader(1, () =>
         {
-            MyGameController.instance.StartGame();
+            // MyGameController.instance.StartGame();
+            MyGameController.instance.Popup_GameInstructionAtEveryStart.gameObject.SetActive(true);
             gameDateRushPanel.SetActive(true);
             gameFreeRidePanel.SetActive(false);
             gameGrandPrixPanel.SetActive(false);
             homePanel.SetActive(false);
             IsBoostAvailable(false);
-            MyGameController.instance.MyManager.textStartFinish.text = "DATE RUSH";
+            MyGameController.instance.MyManager.textStartFinish.text = "<sprite=0> DATE RUSH <sprite=0>";
             MyGameController.instance.MyManager.grandPrixCheckPoints.SetActive(false);
         });
     }
@@ -150,13 +153,15 @@ public class UIManager : MonoBehaviour
     {
         SceneLoader(SceneManager.GetActiveScene().buildIndex, () =>
         {
-            MyGameController.instance.StartGame();
+            // MyGameController.instance.StartGame();
+            MyGameController.instance.Popup_GameInstructionAtEveryStart.gameObject.SetActive(true);
             gameOverPanel.SetActive(false);
             if (MyGameController.instance.gameMode == GameMode.FreeRide)
             {
                 gameFreeRidePanel.SetActive(true);
                 gameDateRushPanel.SetActive(false);
                 gameGrandPrixPanel.SetActive(false);
+                MyGameController.instance.MyManager.textStartFinish.text = "FREE RIDE";
                 MyGameController.instance.MyManager.grandPrixCheckPoints.SetActive(false);
             }
             else if (MyGameController.instance.gameMode == GameMode.GrandPrix)
@@ -165,6 +170,7 @@ public class UIManager : MonoBehaviour
                 gameFreeRidePanel.SetActive(false);
                 gameDateRushPanel.SetActive(false);
                 gameGrandPrixPanel.SetActive(true);
+                MyGameController.instance.MyManager.textStartFinish.text = "<sprite=1> GRAND PRIX <sprite=1>";
                 MyGameController.instance.MyManager.grandPrixCheckPoints.SetActive(true);
             }
             else if (MyGameController.instance.gameMode == GameMode.DateRush)
@@ -173,6 +179,7 @@ public class UIManager : MonoBehaviour
                 gameFreeRidePanel.SetActive(false);
                 gameDateRushPanel.SetActive(true);
                 gameGrandPrixPanel.SetActive(false);
+                MyGameController.instance.MyManager.textStartFinish.text = "<sprite=0> DATE RUSH <sprite=0>";
                 MyGameController.instance.MyManager.grandPrixCheckPoints.SetActive(false);
             }
         });

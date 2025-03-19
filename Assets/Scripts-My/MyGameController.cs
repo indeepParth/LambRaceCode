@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
+using TurnTheGameOn.SimpleTrafficSystem;
 
 public enum GameMode
 {
@@ -132,6 +133,19 @@ public class MyGameController : MonoBehaviour
                 uILoginPanel = transform.GetComponentInChildren<UILoginPanel>(true);
             }
             return uILoginPanel;
+        }
+    }
+
+    private Popup_GameInstructionAtEveryStart popup_GameInstructionAtEveryStart;
+    public Popup_GameInstructionAtEveryStart Popup_GameInstructionAtEveryStart
+    {
+        get
+        {
+            if (popup_GameInstructionAtEveryStart == null)
+            {
+                popup_GameInstructionAtEveryStart = transform.GetComponentInChildren<Popup_GameInstructionAtEveryStart>(true);
+            }
+            return popup_GameInstructionAtEveryStart;
         }
     }
 
@@ -323,6 +337,7 @@ public class MyGameController : MonoBehaviour
                                         MyManager.carLambController.UpdateBlockControl(false);
                                         isGameStart = true;
                                         MySoundManager.RaceTrackSound(true);
+                                        AITrafficController.Instance.StartAITraffic();
                                     });
                                 });
                             });

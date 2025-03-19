@@ -26,8 +26,15 @@ public class SpawnCharacter : MonoBehaviour
                         _character = obj.Result;
                         if (_character != null)
                             _character.transform.localScale = modelScale;
-                        CharacterInfo _chara = obj.Result.GetComponent<CharacterInfo>();
-                        CharacterPoolManager.instance.poolBeachCharacter.Add(_chara);
+                        if (obj.Result != null)
+                        {
+                            CharacterInfo _chara = obj.Result.GetComponent<CharacterInfo>();
+                            CharacterPoolManager.instance.poolBeachCharacter.Add(_chara);
+                        }
+                        else
+                        {
+                            Debug.Log("error on load addressable Beach Character index = " + randomChar);
+                        }
                     }
                     else
                     {

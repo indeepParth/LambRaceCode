@@ -46,7 +46,6 @@ public class BoxPickupDropTrigger : MonoBehaviour
         if (other.gameObject.CompareTag("car"))
         {
             isTriggerOn = true;
-            MyGameController.instance.MyManager.carLambRigidbody.drag = 0.02f;
         }
     }
 }

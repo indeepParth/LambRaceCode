@@ -187,7 +187,18 @@
             }
         }
 
-        private void Start()
+        // private void Start()
+        // {
+        //     if (usePooling)
+        //     {
+        //         StartCoroutine(SpawnStartupTraffic());
+        //     }
+        //     else
+        //     {
+        //         StartCoroutine(Initialize());
+        //     }
+        // }
+        public void StartAITraffic()
         {
             if (usePooling)
             {

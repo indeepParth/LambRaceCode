@@ -24,7 +24,7 @@ public class MyManager : MonoBehaviour
     public BoxCharacterTrigger boxCharacterTrigger;
 
     public GameObject grandPrixCheckPoints;
-    public TextMeshPro textStartFinish; // for grand prix mode only
+    public TextMeshPro textStartFinish;
 
     public bool nitro = false;
     private void OnEnable()
