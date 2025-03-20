@@ -15,6 +15,7 @@ public class MyCarController : MonoBehaviour
     public Transform myChildCar;
     public Rigidbody myRigidbody;
     public BoxCollider boxCollider;
+    public Animator driverAnimator;
     public Transform[] wheelTransforms; // Assign in the inspector
     public Transform[] frontWheelTransforms;
     public float maxSpeed = 20f;
@@ -114,10 +115,12 @@ public class MyCarController : MonoBehaviour
         {
             HandleSteering();
             MyGameController.instance.MySoundManager.EngineSound(true);
+            UpdateDriverAnimator(true);
         }
         else
         {
             MyGameController.instance.MySoundManager.EngineSound(false);
+            UpdateDriverAnimator(false);
         }
         //MyGameController.instance.MySoundManager.EngineSound(moveInput != 0 ? true : false);
 
@@ -582,5 +585,10 @@ public class MyCarController : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    private void UpdateDriverAnimator(bool isDriving)
+    {
+        driverAnimator.SetBool("driving", isDriving);
     }
 }
