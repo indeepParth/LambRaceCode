@@ -18,6 +18,8 @@ public class Panel_Leaderboard : MonoBehaviour, IEnhancedScrollerDelegate
     public EnhancedScroller scroller;
     public EnhancedScrollerCellView cellViewPrefab;
     public UIScrollViewLoading scrollViewLoading;
+    // public CellView_Leaderboard myCellBestScore;
+    public CellView_Leaderboard myCellView;
 
     private void OnEnable()
     {
@@ -40,11 +42,16 @@ public class Panel_Leaderboard : MonoBehaviour, IEnhancedScrollerDelegate
         _data.Clear();
         if (isBestScorePanel)
         {
-            if(type == LeaderboardType.dateRush)
+            if (type == LeaderboardType.dateRush)
             {
                 MyGameController.instance.PlayFabLogin.FetchLeaderboard_DateRush_BestScore((responce) =>
                 {
                     ResponceLeaderboard(responce);
+                });
+
+                MyGameController.instance.PlayFabLogin.FetchMyLeaderboardDateRush_BestScore((responce) =>
+                {
+                    ResponceMyCellScoreUpdate(responce);
                 });
             }
             else
@@ -52,6 +59,10 @@ public class Panel_Leaderboard : MonoBehaviour, IEnhancedScrollerDelegate
                 MyGameController.instance.PlayFabLogin.FetchLeaderboard_GrandPrix_BestScore((responce) =>
                 {
                     ResponceLeaderboard(responce);
+                });
+                MyGameController.instance.PlayFabLogin.FetchMyLeaderboardGrandPrix_BestScore((responce) =>
+                {
+                    ResponceMyCellScoreUpdate(responce);
                 });
             }
         }
@@ -63,12 +74,22 @@ public class Panel_Leaderboard : MonoBehaviour, IEnhancedScrollerDelegate
                 {
                     ResponceLeaderboard(responce);
                 });
+
+                MyGameController.instance.PlayFabLogin.FetchMyLeaderboardDateRush_TotalScore((responce) =>
+                {
+                    ResponceMyCellScoreUpdate(responce);
+                });
             }
             else
             {
                 MyGameController.instance.PlayFabLogin.FetchLeaderboard_GrandPrix_TotalScore((responce) =>
                 {
                     ResponceLeaderboard(responce);
+                });
+
+                MyGameController.instance.PlayFabLogin.FetchMyLeaderboardGrandPrix_TotalScore((responce) =>
+                {
+                    ResponceMyCellScoreUpdate(responce);
                 });
             }
         }
@@ -103,6 +124,52 @@ public class Panel_Leaderboard : MonoBehaviour, IEnhancedScrollerDelegate
         scrollViewLoading.HideLoading();
     }
 
+    private void ResponceMyCellScoreUpdate(MyPlayerDetails responce)
+    {
+        if (!string.IsNullOrEmpty(responce.name))
+        {
+            myCellView.text_Name.text = responce.name;
+            myCellView.text_Rank.text = responce.rank;
+            myCellView.text_Heart.text = responce.heart;
+        }
+        else
+        {
+            myCellView.text_Name.text = MyGameController.instance.PlayFabLogin.GetStoredPlayerName();
+            myCellView.text_Rank.text = "?";
+            myCellView.text_Heart.text = "?";
+        }
+        // if (isBestScorePanel)
+        // {
+        //     if (!string.IsNullOrEmpty(responce.name))
+        //     {
+        //         myCellTotalScore.text_Name.text = responce.name;
+        //         myCellTotalScore.text_Rank.text = responce.rank;
+        //         myCellTotalScore.text_Heart.text = responce.heart;
+        //     }
+        //     else
+        //     {
+        //         myCellTotalScore.text_Name.text = MyGameController.instance.PlayFabLogin.GetStoredPlayerName();
+        //         myCellTotalScore.text_Rank.text = "?";
+        //         myCellTotalScore.text_Heart.text = "?";
+        //     }
+        // }
+        // else
+        // {
+        //     if (!string.IsNullOrEmpty(responce.name))
+        //     {
+        //         myCellTotalScore.text_Name.text = responce.name;
+        //         myCellTotalScore.text_Rank.text = responce.rank;
+        //         myCellTotalScore.text_Heart.text = responce.heart;
+        //     }
+        //     else
+        //     {
+        //         myCellTotalScore.text_Name.text = MyGameController.instance.PlayFabLogin.GetStoredPlayerName();
+        //         myCellTotalScore.text_Rank.text = "?";
+        //         myCellTotalScore.text_Heart.text = "?";
+        //     }
+        // }
+    }
+
     #region EnhancedScroller Handlers
 
     /// <summary>
@@ -127,7 +194,7 @@ public class Panel_Leaderboard : MonoBehaviour, IEnhancedScrollerDelegate
     public float GetCellViewSize(EnhancedScroller scroller, int dataIndex)
     {
         // in this example, even numbered cells are 30 pixels tall, odd numbered cells are 100 pixels tall
-        return (dataIndex % 2 == 0 ? 30f : 100f);
+        return 30;
     }
 
     /// <summary>

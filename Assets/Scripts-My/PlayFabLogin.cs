@@ -52,21 +52,38 @@ public class PlayFabLogin : MonoBehaviour
         // Debug.Log("Congratulations, you made your first successful API call!");
         if (result != null) // && !result.NewlyCreated)
         {
-            UpdatePlayerDetails(GetStoredPlayerName(), (respoce) =>
+            StorePlayFabID(result.PlayFabId);
+            if (!result.NewlyCreated)
+            {
+                FetchPlayerDataFromGS((respoce) =>
                 {
-                    if (!result.NewlyCreated)
-                    {
-                        FetchPlayerDataFromGS((respoce) =>
-                        {
-                            Debug.Log("heart = " + respoce);
-                            MyGameController.instance.UpdateHeartPoint(respoce);
-                        });
-                    }
-                    else
-                    {
-                        MyGameController.instance.UpdateHeartPoint(0);
-                    }
+                    Debug.Log("heart = " + respoce);
+                    MyGameController.instance.UpdateHeartPoint(respoce);
                 });
+            }
+            else
+            {
+                MyGameController.instance.UpdateHeartPoint(0);
+            }
+
+            // UpdatePlayerDetails(GetStoredPlayerName(), null);
+            Timer.ScheduleString(this, 1, DelayUpdateName, GetStoredPlayerName());
+
+            // UpdatePlayerDetails(GetStoredPlayerName(), (respoce) =>
+            //     {
+            //         if (!result.NewlyCreated)
+            //         {
+            //             FetchPlayerDataFromGS((respoce) =>
+            //             {
+            //                 Debug.Log("heart = " + respoce);
+            //                 MyGameController.instance.UpdateHeartPoint(respoce);
+            //             });
+            //         }
+            //         else
+            //         {
+            //             MyGameController.instance.UpdateHeartPoint(0);
+            //         }
+            //     });
         }
         else
         {
@@ -88,6 +105,16 @@ public class PlayFabLogin : MonoBehaviour
     /// </summary>
     /// 
 
+    public string GetStoredPlayFabID()
+    {
+        return PlayerPrefs.GetString(Utility.KEY_PLAYFABID);
+    }
+
+    public void StorePlayFabID(string id)
+    {
+        PlayerPrefs.SetString(Utility.KEY_PLAYFABID, id);
+    }
+
     public string GetStoredWalletAddress()
     {
         return PlayerPrefs.GetString(Utility.KEY_WALLET_ID);
@@ -108,6 +135,10 @@ public class PlayFabLogin : MonoBehaviour
         PlayerPrefs.SetString(Utility.KEY_PLAYERNAME, name);
     }
 
+    void DelayUpdateName(string newName)
+    {
+        UpdatePlayerDetails(newName, null);
+    }
     public void UpdatePlayerDetails(string newName, GSBool callback)
     {
         PlayFabClientAPI.UpdateUserTitleDisplayName(new UpdateUserTitleDisplayNameRequest
@@ -115,8 +146,15 @@ public class PlayFabLogin : MonoBehaviour
             DisplayName = newName //PlayerPrefs.GetString(NMPhoton.KEY_PLAYERNAME)
         }, (res) =>
         {
-            StorePlayerName(newName);
-            callback?.Invoke(true);
+            if (res.DisplayName.ToLower() != newName.ToLower())
+            {
+                UpdatePlayerDetails(newName, callback);
+            }
+            else
+            {
+                StorePlayerName(newName);
+                callback?.Invoke(true);
+            }
         }, (err) =>
         {
             Debug.LogError("UpdatePlayerDetails failed.");
@@ -353,26 +391,143 @@ public class PlayFabLogin : MonoBehaviour
                 );
     }
 
-    MyPlayerDetails playerLeaderlordDetail = new MyPlayerDetails();
-
-    List<string> leaderloards = new List<string> { "HighestWins" };
-    public void FetchPlayerLeaderboardDataFromGS(GSPlayerDatails callback)
+    public void FetchMyLeaderboardDateRush_TotalScore(GSPlayerDatails callback)
     {
         PlayFabClientAPI.GetLeaderboardAroundPlayer(
                 // Request
                 new GetLeaderboardAroundPlayerRequest
                 {
-                    StatisticName = "High Score",
-                    MaxResultsCount = 1
+                    StatisticName = "Heart",
+                    MaxResultsCount = 1,
+                    PlayFabId = MyGameController.instance.PlayFabLogin.GetStoredPlayFabID()
                 },
                 // Success
                 (result) =>
                 {
-                    foreach (PlayerLeaderboardEntry entry in result.Leaderboard)
+                    MyPlayerDetails playerLeaderlordDetail = new MyPlayerDetails();
+                    // foreach (PlayerLeaderboardEntry entry in result.Leaderboard)
+                    // {
+                    //     playerLeaderlordDetail.rank = (entry.Position + 1).ToString();
+                    //     playerLeaderlordDetail.name = entry.DisplayName;
+                    //     playerLeaderlordDetail.heart = entry.StatValue.ToString();
+                    // }
+                    if (result.Leaderboard.Count > 0)
                     {
-                        playerLeaderlordDetail.rank = (entry.Position + 1).ToString();
-                        playerLeaderlordDetail.name = entry.DisplayName;
-                        playerLeaderlordDetail.heart = entry.StatValue.ToString();
+                        Debug.Log("DateRush_TotalScore = " + result.Leaderboard[0].Position + 1);
+                        playerLeaderlordDetail = new MyPlayerDetails((result.Leaderboard[0].Position + 1).ToString(),
+                        result.Leaderboard[0].DisplayName, result.Leaderboard[0].StatValue.ToString());
+                    }
+                    callback?.Invoke(playerLeaderlordDetail);
+                },
+                // Failure
+                (PlayFabError error) =>
+                {
+                    Debug.Log("Error Retrieving Player Leaderboard Data...");
+                    Debug.LogError(error.GenerateErrorReport());
+                    callback?.Invoke(new MyPlayerDetails());
+                }
+                );
+    }
+    public void FetchMyLeaderboardDateRush_BestScore(GSPlayerDatails callback)
+    {
+        PlayFabClientAPI.GetLeaderboardAroundPlayer(
+                // Request
+                new GetLeaderboardAroundPlayerRequest
+                {
+                    StatisticName = "BestHeart",
+                    MaxResultsCount = 1,
+                    PlayFabId = MyGameController.instance.PlayFabLogin.GetStoredPlayFabID()
+                },
+                // Success
+                (result) =>
+                {
+                    MyPlayerDetails playerLeaderlordDetail = new MyPlayerDetails();
+                    // foreach (PlayerLeaderboardEntry entry in result.Leaderboard)
+                    // {
+                    //     playerLeaderlordDetail.rank = (entry.Position + 1).ToString();
+                    //     playerLeaderlordDetail.name = entry.DisplayName;
+                    //     playerLeaderlordDetail.heart = entry.StatValue.ToString();
+                    // }
+                    if (result.Leaderboard.Count > 0)
+                    {
+                        Debug.Log("DateRush_BestScore = " + result.Leaderboard[0].Position + 1);
+                        playerLeaderlordDetail = new MyPlayerDetails((result.Leaderboard[0].Position + 1).ToString(),
+                        result.Leaderboard[0].DisplayName, result.Leaderboard[0].StatValue.ToString());
+                    }
+                    callback?.Invoke(playerLeaderlordDetail);
+                },
+                // Failure
+                (PlayFabError error) =>
+                {
+                    Debug.Log("Error Retrieving Player Leaderboard Data...");
+                    Debug.LogError(error.GenerateErrorReport());
+                    callback?.Invoke(new MyPlayerDetails());
+                }
+                );
+    }
+
+    public void FetchMyLeaderboardGrandPrix_TotalScore(GSPlayerDatails callback)
+    {
+        PlayFabClientAPI.GetLeaderboardAroundPlayer(
+                // Request
+                new GetLeaderboardAroundPlayerRequest
+                {
+                    StatisticName = "LapCounter",
+                    MaxResultsCount = 1,
+                    PlayFabId = MyGameController.instance.PlayFabLogin.GetStoredPlayFabID()
+                },
+                // Success
+                (result) =>
+                {
+                    MyPlayerDetails playerLeaderlordDetail = new MyPlayerDetails();
+                    // foreach (PlayerLeaderboardEntry entry in result.Leaderboard)
+                    // {
+                    //     playerLeaderlordDetail.rank = (entry.Position + 1).ToString();
+                    //     playerLeaderlordDetail.name = entry.DisplayName;
+                    //     playerLeaderlordDetail.heart = entry.StatValue.ToString();
+                    // }
+                    if (result.Leaderboard.Count > 0)
+                    {
+                        Debug.Log("GrandPrix_TotalScore = " + result.Leaderboard[0].Position + 1);
+                        playerLeaderlordDetail = new MyPlayerDetails((result.Leaderboard[0].Position + 1).ToString(),
+                        result.Leaderboard[0].DisplayName, result.Leaderboard[0].StatValue.ToString());
+                    }
+                    callback?.Invoke(playerLeaderlordDetail);
+                },
+                // Failure
+                (PlayFabError error) =>
+                {
+                    Debug.Log("Error Retrieving Player Leaderboard Data...");
+                    Debug.LogError(error.GenerateErrorReport());
+                    callback?.Invoke(new MyPlayerDetails());
+                }
+                );
+    }
+    public void FetchMyLeaderboardGrandPrix_BestScore(GSPlayerDatails callback)
+    {
+        PlayFabClientAPI.GetLeaderboardAroundPlayer(
+                // Request
+                new GetLeaderboardAroundPlayerRequest
+                {
+                    StatisticName = "LapTime",
+                    MaxResultsCount = 1,
+                    PlayFabId = MyGameController.instance.PlayFabLogin.GetStoredPlayFabID()
+                },
+                // Success
+                (result) =>
+                {
+                    MyPlayerDetails playerLeaderlordDetail = new MyPlayerDetails();
+                    // foreach (PlayerLeaderboardEntry entry in result.Leaderboard)
+                    // {
+                    //     playerLeaderlordDetail.rank = (entry.Position + 1).ToString();
+                    //     playerLeaderlordDetail.name = entry.DisplayName;
+                    //     playerLeaderlordDetail.heart = entry.StatValue.ToString();
+                    // }
+                    if (result.Leaderboard.Count > 0)
+                    {
+                        Debug.Log("GrandPrix_BestScore = " + result.Leaderboard[0].Position + 1);
+                        playerLeaderlordDetail = new MyPlayerDetails((result.Leaderboard[0].Position + 1).ToString(),
+                        result.Leaderboard[0].DisplayName, result.Leaderboard[0].StatValue.ToString());
                     }
                     callback?.Invoke(playerLeaderlordDetail);
                 },

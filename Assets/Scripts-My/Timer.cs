@@ -8,6 +8,7 @@ public class Timer
     public delegate void Task();
     public delegate void Taski(float i);
     public delegate void TaskINT(int i);
+    public delegate void TaskString(string i);
 
     public static void Schedule(MonoBehaviour _behaviour, float delay, Task task)
     {
@@ -42,6 +43,20 @@ public class Timer
     }
 
     private static IEnumerator DoTaskINT(TaskINT taski, float delay, int index)
+    {
+        yield return new WaitForSeconds(delay);
+        taski(index);
+    }
+
+    //
+
+    public static void ScheduleString(MonoBehaviour _behaviour, float delay, TaskString task, string index)
+    {
+        behaviour = _behaviour;
+        behaviour.StartCoroutine(DoTaskString(task, delay, index));
+    }
+
+    private static IEnumerator DoTaskString(TaskString taski, float delay, string index)
     {
         yield return new WaitForSeconds(delay);
         taski(index);
