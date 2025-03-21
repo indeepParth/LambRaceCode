@@ -365,19 +365,19 @@ public class PlayFabLogin : MonoBehaviour
                 // Success
                 (GetLeaderboardResult result) =>
                 {
-                    List<PlayerLeaderboardEntry> leaderloardItemsAsending = new List<PlayerLeaderboardEntry>();
-                    leaderloardItemsAsending = result.Leaderboard.OrderBy(x => x.StatValue).ToList();
+                    // List<PlayerLeaderboardEntry> leaderloardItemsAsending = new List<PlayerLeaderboardEntry>();
+                    // leaderloardItemsAsending = result.Leaderboard.OrderBy(x => x.StatValue).ToList();
 
                     List<MyPlayerDetails> leaderloardItems = new List<MyPlayerDetails>();
                     leaderloardItems.Clear();
-                    for (int i = 0; i < leaderloardItemsAsending.Count; i++)
+                    for (int i = 0; i < result.Leaderboard.Count; i++)
                     {
-                        PlayerLeaderboardEntry entry = leaderloardItemsAsending[i];
+                        PlayerLeaderboardEntry entry = result.Leaderboard[i];
                         // rank = (entry.Position + 1).ToString();
                         // playerName = entry.DisplayName;
                         // wins = entry.StatValue.ToString();
                         leaderloardItems.Add(new MyPlayerDetails((i + 1).ToString()
-                        , entry.DisplayName, entry.StatValue.ToString()));
+                        , entry.DisplayName, (-1*entry.StatValue).ToString()));
                     }
                     callback?.Invoke(leaderloardItems);
                 },
@@ -527,7 +527,7 @@ public class PlayFabLogin : MonoBehaviour
                     {
                         Debug.Log("GrandPrix_BestScore = " + result.Leaderboard[0].Position + 1);
                         playerLeaderlordDetail = new MyPlayerDetails((result.Leaderboard[0].Position + 1).ToString(),
-                        result.Leaderboard[0].DisplayName, result.Leaderboard[0].StatValue.ToString());
+                        result.Leaderboard[0].DisplayName, (-1*result.Leaderboard[0].StatValue).ToString());
                     }
                     callback?.Invoke(playerLeaderlordDetail);
                 },
