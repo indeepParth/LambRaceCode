@@ -109,7 +109,7 @@ public class Panel_Leaderboard : MonoBehaviour, IEnhancedScrollerDelegate
                 _data.Add(new DataLeaderBoard()
                 {
                     rank = item.rank,
-                    name = item.name,
+                    name = MyGameController.ShortenAddress(item.name),
                     heart = item.heart
                 });
             }
@@ -128,13 +128,13 @@ public class Panel_Leaderboard : MonoBehaviour, IEnhancedScrollerDelegate
     {
         if (!string.IsNullOrEmpty(responce.name))
         {
-            myCellView.text_Name.text = responce.name;
-            myCellView.text_Rank.text = responce.rank;
+            myCellView.text_Name.text = "YOU";//responce.name;
+            myCellView.text_Rank.text = responce.rank + ".";
             myCellView.text_Heart.text = responce.heart;
         }
         else
         {
-            myCellView.text_Name.text = MyGameController.instance.PlayFabLogin.GetStoredPlayerName();
+            myCellView.text_Name.text = MyGameController.ShortenAddress(MyGameController.instance.PlayFabLogin.GetStoredPlayerName());
             myCellView.text_Rank.text = "?";
             myCellView.text_Heart.text = "?";
         }

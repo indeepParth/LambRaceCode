@@ -67,7 +67,7 @@ public class PlayFabLogin : MonoBehaviour
             }
 
             // UpdatePlayerDetails(GetStoredPlayerName(), null);
-            Timer.ScheduleString(this, 1, DelayUpdateName, GetStoredPlayerName());
+            Timer.ScheduleString(this, 2, DelayUpdateName, GetStoredPlayerName());
 
             // UpdatePlayerDetails(GetStoredPlayerName(), (respoce) =>
             //     {
@@ -159,6 +159,8 @@ public class PlayFabLogin : MonoBehaviour
         {
             Debug.LogError("UpdatePlayerDetails failed.");
             callback?.Invoke(false);
+            if (!string.IsNullOrEmpty(PlayFabSettings.staticPlayer.PlayFabId))
+                Timer.ScheduleString(this, 2, DelayUpdateName, newName);
         });
     }
 
@@ -377,7 +379,7 @@ public class PlayFabLogin : MonoBehaviour
                         // playerName = entry.DisplayName;
                         // wins = entry.StatValue.ToString();
                         leaderloardItems.Add(new MyPlayerDetails((i + 1).ToString()
-                        , entry.DisplayName, (-1*entry.StatValue).ToString()));
+                        , entry.DisplayName, (-1 * entry.StatValue).ToString()));
                     }
                     callback?.Invoke(leaderloardItems);
                 },
@@ -413,7 +415,8 @@ public class PlayFabLogin : MonoBehaviour
                     // }
                     if (result.Leaderboard.Count > 0)
                     {
-                        Debug.Log("DateRush_TotalScore = " + result.Leaderboard[0].Position + 1);
+                        // Debug.Log(" MY DateRush_TotalScore PublisherId= " + result.Leaderboard[0].Profile.PublisherId);
+                        // Debug.Log(" MY DateRush_TotalScore TitleId= " + result.Leaderboard[0].Profile.TitleId);
                         playerLeaderlordDetail = new MyPlayerDetails((result.Leaderboard[0].Position + 1).ToString(),
                         result.Leaderboard[0].DisplayName, result.Leaderboard[0].StatValue.ToString());
                     }
@@ -527,7 +530,7 @@ public class PlayFabLogin : MonoBehaviour
                     {
                         Debug.Log("GrandPrix_BestScore = " + result.Leaderboard[0].Position + 1);
                         playerLeaderlordDetail = new MyPlayerDetails((result.Leaderboard[0].Position + 1).ToString(),
-                        result.Leaderboard[0].DisplayName, (-1*result.Leaderboard[0].StatValue).ToString());
+                        result.Leaderboard[0].DisplayName, (-1 * result.Leaderboard[0].StatValue).ToString());
                     }
                     callback?.Invoke(playerLeaderlordDetail);
                 },
@@ -540,6 +543,7 @@ public class PlayFabLogin : MonoBehaviour
                 }
                 );
     }
+
 }
 
 public struct MyPlayerDetails
