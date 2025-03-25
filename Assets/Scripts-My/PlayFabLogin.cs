@@ -66,6 +66,7 @@ public class PlayFabLogin : MonoBehaviour
                 MyGameController.instance.UpdateHeartPoint(0);
             }
 
+            updateNameCounter = 0;
             // UpdatePlayerDetails(GetStoredPlayerName(), null);
             Timer.ScheduleString(this, 2, DelayUpdateName, MyGameController.ShortenAddress(MyGameController.instance.PlayFabLogin.GetStoredWalletAddress()));
 
@@ -135,9 +136,14 @@ public class PlayFabLogin : MonoBehaviour
         PlayerPrefs.SetString(Utility.KEY_PLAYERNAME, name);
     }
 
+    int updateNameCounter = 0;
     void DelayUpdateName(string newName)
     {
-        UpdatePlayerDetails(newName, null);
+        updateNameCounter++;
+        if (updateNameCounter < 5)
+        {
+            UpdatePlayerDetails(newName, null);
+        }
     }
     public void UpdatePlayerDetails(string newName, GSBool callback)
     {

@@ -18,6 +18,7 @@ public class UILeaderboardPanel : MonoBehaviour
     public Panel_Leaderboard totalScore_Leaderboard;
     public RectTransform imgBtn_Toggle;
     public TextMeshProUGUI nameLeaderboard;
+    public RectTransform bestScore_Leaderboard_RectTransform;
 
     void Awake()
     {
@@ -45,17 +46,30 @@ public class UILeaderboardPanel : MonoBehaviour
     private void Btn_leaderboard(int type)
     {
         leaderboard_Type = type == 0 ? LeaderboardType.dateRush : LeaderboardType.grandPrix;
-        bestScore_Leaderboard.LoadLeaderboardData(leaderboard_Type);
-        totalScore_Leaderboard.LoadLeaderboardData(leaderboard_Type);
+        
         switch (leaderboard_Type)
         {
             case LeaderboardType.dateRush:
                 imgBtn_Toggle.DOAnchorPosX(-14, 0.2f);
                 nameLeaderboard.text = "DATE RUSH LEADERBOARD";
+
+                // totalScore_Leaderboard.gameObject.SetActive(true);
+                bestScore_Leaderboard_RectTransform.DOAnchorPosX(-175, 0.2f).SetEase(Ease.InOutExpo).OnComplete(() =>
+                {
+                    totalScore_Leaderboard.gameObject.SetActive(true);
+                });
+
+                bestScore_Leaderboard.LoadLeaderboardData(leaderboard_Type);
+                totalScore_Leaderboard.LoadLeaderboardData(leaderboard_Type);
                 break;
             case LeaderboardType.grandPrix:
                 imgBtn_Toggle.DOAnchorPosX(14, 0.2f);
                 nameLeaderboard.text = "GRAND PRIX LEADERBOARD";
+
+                totalScore_Leaderboard.gameObject.SetActive(false);
+                bestScore_Leaderboard_RectTransform.DOAnchorPosX(0, 0.2f).SetEase(Ease.InOutExpo);
+
+                bestScore_Leaderboard.LoadLeaderboardData(leaderboard_Type);
                 break;
         }
     }
