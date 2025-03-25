@@ -67,7 +67,7 @@ public class PlayFabLogin : MonoBehaviour
             }
 
             // UpdatePlayerDetails(GetStoredPlayerName(), null);
-            Timer.ScheduleString(this, 2, DelayUpdateName, GetStoredPlayerName());
+            Timer.ScheduleString(this, 2, DelayUpdateName, MyGameController.ShortenAddress(MyGameController.instance.PlayFabLogin.GetStoredWalletAddress()));
 
             // UpdatePlayerDetails(GetStoredPlayerName(), (respoce) =>
             //     {
@@ -148,7 +148,7 @@ public class PlayFabLogin : MonoBehaviour
         {
             if (res.DisplayName.ToLower() != newName.ToLower())
             {
-                UpdatePlayerDetails(newName, callback);
+                Timer.ScheduleString(this, 2, DelayUpdateName, newName);
             }
             else
             {
@@ -259,7 +259,7 @@ public class PlayFabLogin : MonoBehaviour
                 {
                     StatisticName = "Heart",
                     StartPosition = 0,
-                    MaxResultsCount = 100
+                    MaxResultsCount = 20
                 },
                 // Success
                 (GetLeaderboardResult result) =>
@@ -293,7 +293,7 @@ public class PlayFabLogin : MonoBehaviour
                 {
                     StatisticName = "BestHeart",
                     StartPosition = 0,
-                    MaxResultsCount = 100
+                    MaxResultsCount = 20
                 },
                 // Success
                 (GetLeaderboardResult result) =>
@@ -328,7 +328,7 @@ public class PlayFabLogin : MonoBehaviour
                 {
                     StatisticName = "LapCounter",
                     StartPosition = 0,
-                    MaxResultsCount = 100
+                    MaxResultsCount = 20
                 },
                 // Success
                 (GetLeaderboardResult result) =>
@@ -362,7 +362,7 @@ public class PlayFabLogin : MonoBehaviour
                 {
                     StatisticName = "LapTime",
                     StartPosition = 0,
-                    MaxResultsCount = 100
+                    MaxResultsCount = 20
                 },
                 // Success
                 (GetLeaderboardResult result) =>

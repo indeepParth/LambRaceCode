@@ -1,5 +1,6 @@
 using EnhancedUI;
 using EnhancedUI.EnhancedScroller;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -47,11 +48,10 @@ public class Panel_Leaderboard : MonoBehaviour, IEnhancedScrollerDelegate
                 MyGameController.instance.PlayFabLogin.FetchLeaderboard_DateRush_BestScore((responce) =>
                 {
                     ResponceLeaderboard(responce);
-                });
-
-                MyGameController.instance.PlayFabLogin.FetchMyLeaderboardDateRush_BestScore((responce) =>
-                {
-                    ResponceMyCellScoreUpdate(responce);
+                    MyGameController.instance.PlayFabLogin.FetchMyLeaderboardDateRush_BestScore((responceMy) =>
+                    {
+                        ResponceMyCellScoreUpdate(responceMy, responce);
+                    });
                 });
             }
             else
@@ -59,10 +59,10 @@ public class Panel_Leaderboard : MonoBehaviour, IEnhancedScrollerDelegate
                 MyGameController.instance.PlayFabLogin.FetchLeaderboard_GrandPrix_BestScore((responce) =>
                 {
                     ResponceLeaderboard(responce);
-                });
-                MyGameController.instance.PlayFabLogin.FetchMyLeaderboardGrandPrix_BestScore((responce) =>
-                {
-                    ResponceMyCellScoreUpdate(responce);
+                    MyGameController.instance.PlayFabLogin.FetchMyLeaderboardGrandPrix_BestScore((responceMy) =>
+                    {
+                        ResponceMyCellScoreUpdate(responceMy, responce);
+                    });
                 });
             }
         }
@@ -73,11 +73,10 @@ public class Panel_Leaderboard : MonoBehaviour, IEnhancedScrollerDelegate
                 MyGameController.instance.PlayFabLogin.FetchLeaderboard_DateRush_TotalScore((responce) =>
                 {
                     ResponceLeaderboard(responce);
-                });
-
-                MyGameController.instance.PlayFabLogin.FetchMyLeaderboardDateRush_TotalScore((responce) =>
-                {
-                    ResponceMyCellScoreUpdate(responce);
+                    MyGameController.instance.PlayFabLogin.FetchMyLeaderboardDateRush_TotalScore((responceMy) =>
+                    {
+                        ResponceMyCellScoreUpdate(responceMy, responce);
+                    });
                 });
             }
             else
@@ -85,15 +84,14 @@ public class Panel_Leaderboard : MonoBehaviour, IEnhancedScrollerDelegate
                 MyGameController.instance.PlayFabLogin.FetchLeaderboard_GrandPrix_TotalScore((responce) =>
                 {
                     ResponceLeaderboard(responce);
-                });
-
-                MyGameController.instance.PlayFabLogin.FetchMyLeaderboardGrandPrix_TotalScore((responce) =>
-                {
-                    ResponceMyCellScoreUpdate(responce);
+                    MyGameController.instance.PlayFabLogin.FetchMyLeaderboardGrandPrix_TotalScore((responceMy) =>
+                    {
+                        ResponceMyCellScoreUpdate(responceMy, responce);
+                    });
                 });
             }
         }
-        
+
     }
     private void ResponceLeaderboard(List<MyPlayerDetails> responce)
     {
@@ -124,8 +122,16 @@ public class Panel_Leaderboard : MonoBehaviour, IEnhancedScrollerDelegate
         scrollViewLoading.HideLoading();
     }
 
-    private void ResponceMyCellScoreUpdate(MyPlayerDetails responce)
+    private void ResponceMyCellScoreUpdate(MyPlayerDetails responce, List<MyPlayerDetails> listResponce)
     {
+        foreach (MyPlayerDetails item in listResponce)
+        {
+            if (item.name == responce.name)
+            {
+                responce = item;
+                break;
+            }
+        }
         if (!string.IsNullOrEmpty(responce.name))
         {
             myCellView.text_Name.text = "YOU";//responce.name;
@@ -134,40 +140,10 @@ public class Panel_Leaderboard : MonoBehaviour, IEnhancedScrollerDelegate
         }
         else
         {
-            myCellView.text_Name.text = MyGameController.ShortenAddress(MyGameController.instance.PlayFabLogin.GetStoredPlayerName());
+            myCellView.text_Name.text = "YOU";
             myCellView.text_Rank.text = "?";
             myCellView.text_Heart.text = "?";
         }
-        // if (isBestScorePanel)
-        // {
-        //     if (!string.IsNullOrEmpty(responce.name))
-        //     {
-        //         myCellTotalScore.text_Name.text = responce.name;
-        //         myCellTotalScore.text_Rank.text = responce.rank;
-        //         myCellTotalScore.text_Heart.text = responce.heart;
-        //     }
-        //     else
-        //     {
-        //         myCellTotalScore.text_Name.text = MyGameController.instance.PlayFabLogin.GetStoredPlayerName();
-        //         myCellTotalScore.text_Rank.text = "?";
-        //         myCellTotalScore.text_Heart.text = "?";
-        //     }
-        // }
-        // else
-        // {
-        //     if (!string.IsNullOrEmpty(responce.name))
-        //     {
-        //         myCellTotalScore.text_Name.text = responce.name;
-        //         myCellTotalScore.text_Rank.text = responce.rank;
-        //         myCellTotalScore.text_Heart.text = responce.heart;
-        //     }
-        //     else
-        //     {
-        //         myCellTotalScore.text_Name.text = MyGameController.instance.PlayFabLogin.GetStoredPlayerName();
-        //         myCellTotalScore.text_Rank.text = "?";
-        //         myCellTotalScore.text_Heart.text = "?";
-        //     }
-        // }
     }
 
     #region EnhancedScroller Handlers

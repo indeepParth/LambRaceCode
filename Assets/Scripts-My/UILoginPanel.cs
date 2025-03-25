@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class UILoginPanel : MonoBehaviour
 {
-    public TMP_InputField textPlayerName;
+    // public TMP_InputField textPlayerName;
     public TMP_InputField textWalletAddress;
 
     public GameObject obj_invalidName;
@@ -18,22 +18,22 @@ public class UILoginPanel : MonoBehaviour
     {
         obj_invalidName.SetActive(false);
         obj_invalidWallet.SetActive(false);
-        textPlayerName.text = "";
+        // textPlayerName.text = "";
         textWalletAddress.text = "";
     }
 
     public void Btn_Login()
     {
-        CheckPlayerName();
+        // CheckPlayerName();
         CheckWalletAddress();
-        if (nameOK && walletOK)
+        if (walletOK) // nameOK &&
         {
             MyGameController.instance.PlayFabLogin.LoginWithPlayfab();
             // Debug.LogWarning("LoginWithPlayfab() is not implemented yet");
         }
     }
 
-    private void CheckPlayerName()
+    /*private void CheckPlayerName()
     {
         nameOK = false;
         string name = textPlayerName.text;
@@ -47,7 +47,7 @@ public class UILoginPanel : MonoBehaviour
             Debug.LogWarning("Invalid player name");
             obj_invalidName.SetActive(true);
         }
-    }
+    }*/
 
     private void CheckWalletAddress()
     {

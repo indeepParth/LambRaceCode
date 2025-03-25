@@ -350,10 +350,10 @@ public class MyGameController : MonoBehaviour
 
     public static string ShortenAddress(string address)
     {
-        if (string.IsNullOrEmpty(address) || address.Length < 10)
+        if (string.IsNullOrEmpty(address) || address.Length < 20)
             return address; // Return original if it's too short
 
-        return $"{address.Substring(0, 6)}......{address.Substring(address.Length - 4)}";
+        return $"{address.Substring(0, 8)}......{address.Substring(address.Length - 5)}";
     }
 }
 
