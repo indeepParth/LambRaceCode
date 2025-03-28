@@ -8,6 +8,14 @@ using DG.DemiLib;
 using DG.Tweening;
 using UnityEngine.Rendering.PostProcessing;
 using TMPro;
+using System;
+
+[Serializable]
+public class GameStartPosition
+{
+    public GameMode gameMode;
+    public Transform carPos, flagPos, cameraPos;
+}
 
 public class MyManager : MonoBehaviour
 {
@@ -26,12 +34,29 @@ public class MyManager : MonoBehaviour
     public GameObject grandPrixCheckPoints;
     public TextMeshPro textStartFinish;
 
+    public Transform flagStartObject;
+    public GameStartPosition[] gameStartPositions;
+
     public bool nitro = false;
     private void OnEnable()
     {
+        SetPositionOfGameStart();
         MyGameController.instance.MyCarStateUI.carLambController = carLambController;
         MyGameController.instance.MyCarStateUI.InitializeCar();
     }
+
+    private void SetPositionOfGameStart()
+    {
+        GameStartPosition gameStartPosition = gameStartPositions[((int)MyGameController.instance.gameMode) - 1];
+        carLamb.position = gameStartPosition.carPos.position;
+        carLamb.rotation = gameStartPosition.carPos.rotation;
+        mainCamera.transform.position = gameStartPosition.cameraPos.position;
+        mainCamera.transform.rotation = gameStartPosition.cameraPos.rotation;
+        flagStartObject.transform.position = gameStartPosition.flagPos.position;
+        flagStartObject.transform.rotation = gameStartPosition.flagPos.rotation;
+        carLamb.gameObject.SetActive(true);
+    }
+
     public void OnBoostNitroEnableSpeedEffect()
     {
         mainCamera.DOFieldOfView(75, 1);

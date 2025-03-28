@@ -143,7 +143,7 @@ public class PickupDropPassangerManager : MonoBehaviour
     {
         if (prevPointAtDistance < 0)
         {
-            prevPointAtDistance = 4000;
+            prevPointAtDistance = 150; // 4000
             return prevPointAtDistance;
         }
 

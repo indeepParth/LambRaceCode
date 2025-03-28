@@ -83,7 +83,10 @@ public class SpawnCharacter : MonoBehaviour
     }
     public void CharacterDisable()
     {
-        _character.gameObject.SetActive(false);
-        _character.transform.parent = CharacterPoolManager.instance.poolParent;
+        if (_character != null)
+        {
+            _character.gameObject.SetActive(false);
+            _character.transform.parent = CharacterPoolManager.instance.poolParent;
+        }
     }
 }

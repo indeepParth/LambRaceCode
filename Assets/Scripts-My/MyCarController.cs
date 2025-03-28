@@ -89,6 +89,9 @@ public class MyCarController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!MyGameController.instance.isGameStart)
+            return;      
+
         if (jumpEffect) { JumpBoostEffectEnd(); }
         HandleMovement();
         HandleBoost();
@@ -98,6 +101,8 @@ public class MyCarController : MonoBehaviour
 
     void Update()
     {
+        if (!MyGameController.instance.isGameStart)
+            return;
         //HandleMovement();        
         //HandleBoost();
         //UpdateWheelPoses();

@@ -48,9 +48,13 @@ public class UIManager : MonoBehaviour
             SceneManager.LoadSceneAsync(index).completed += (obj) =>
             {
                 MyGameController.instance.ResetGame();
-                UIScreenBlend.Instance.DarkOut(() =>
+                Timer.Schedule(this, 1f, () =>
                 {
-                    MyGameController.instance.MyCarStateUI.gameObject.SetActive(index == 0 ? false : true);
+                    UIScreenBlend.Instance.DarkOut(() =>
+                        {
+                            MyGameController.instance.Popup_GameInstructionAtEveryStart.gameObject.SetActive(index == 0 ? false : true);
+                            MyGameController.instance.MyCarStateUI.gameObject.SetActive(index == 0 ? false : true);
+                        });
                 });
                 if (callback != null)
                 {
@@ -88,7 +92,7 @@ public class UIManager : MonoBehaviour
         SceneLoader(1, () =>
         {
             // MyGameController.instance.StartGame();
-            MyGameController.instance.Popup_GameInstructionAtEveryStart.gameObject.SetActive(true);
+            // MyGameController.instance.Popup_GameInstructionAtEveryStart.gameObject.SetActive(true);
             gameFreeRidePanel.SetActive(false);
             gameDateRushPanel.SetActive(false);
             gameGrandPrixPanel.SetActive(true);
@@ -108,7 +112,7 @@ public class UIManager : MonoBehaviour
         SceneLoader(1, () =>
         {
             // MyGameController.instance.StartGame();
-            MyGameController.instance.Popup_GameInstructionAtEveryStart.gameObject.SetActive(true);
+            // MyGameController.instance.Popup_GameInstructionAtEveryStart.gameObject.SetActive(true);
             gameDateRushPanel.SetActive(true);
             gameFreeRidePanel.SetActive(false);
             gameGrandPrixPanel.SetActive(false);
@@ -123,7 +127,7 @@ public class UIManager : MonoBehaviour
     {
         MyGameController.instance.gameMode = GameMode.None;
         MyGameController.instance.MySoundManager.RaceTrackSound(false);
-        MyGameController.instance.MyManager.boxCharacterTrigger.CharacterDisableOnSceneHome();
+        MyGameController.instance.MyManager.boxCharacterTrigger?.CharacterDisableOnSceneHome();
         SceneLoader(0, () =>
         {
             gameOverPanel.SetActive(false);
@@ -154,7 +158,7 @@ public class UIManager : MonoBehaviour
         SceneLoader(SceneManager.GetActiveScene().buildIndex, () =>
         {
             // MyGameController.instance.StartGame();
-            MyGameController.instance.Popup_GameInstructionAtEveryStart.gameObject.SetActive(true);
+            // MyGameController.instance.Popup_GameInstructionAtEveryStart.gameObject.SetActive(true);
             gameOverPanel.SetActive(false);
             if (MyGameController.instance.gameMode == GameMode.FreeRide)
             {
