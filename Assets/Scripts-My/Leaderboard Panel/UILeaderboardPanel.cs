@@ -17,7 +17,7 @@ public class UILeaderboardPanel : MonoBehaviour
     public Panel_Leaderboard bestScore_Leaderboard;
     public Panel_Leaderboard totalScore_Leaderboard;
     public RectTransform imgBtn_Toggle;
-    public TextMeshProUGUI nameLeaderboard;
+    public TextMeshProUGUI nameLeaderboard, textDateRushLeaderboard, textGrandPrixLeaderboard;
     public RectTransform bestScore_Leaderboard_RectTransform;
 
     void Awake()
@@ -52,6 +52,8 @@ public class UILeaderboardPanel : MonoBehaviour
             case LeaderboardType.dateRush:
                 imgBtn_Toggle.DOAnchorPosX(-14, 0.2f);
                 nameLeaderboard.text = "DATE RUSH LEADERBOARD";
+                textDateRushLeaderboard.DOFade(1, 0.2f);
+                textGrandPrixLeaderboard.DOFade(0.05f, 0.2f);
 
                 // totalScore_Leaderboard.gameObject.SetActive(true);
                 bestScore_Leaderboard_RectTransform.DOAnchorPosX(-175, 0.2f).SetEase(Ease.InOutExpo).OnComplete(() =>
@@ -65,6 +67,8 @@ public class UILeaderboardPanel : MonoBehaviour
             case LeaderboardType.grandPrix:
                 imgBtn_Toggle.DOAnchorPosX(14, 0.2f);
                 nameLeaderboard.text = "GRAND PRIX LEADERBOARD";
+                textDateRushLeaderboard.DOFade(0.05f, 0.2f);
+                textGrandPrixLeaderboard.DOFade(1, 0.2f);
 
                 totalScore_Leaderboard.gameObject.SetActive(false);
                 bestScore_Leaderboard_RectTransform.DOAnchorPosX(0, 0.2f).SetEase(Ease.InOutExpo);
