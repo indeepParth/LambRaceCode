@@ -119,12 +119,12 @@ public class MyCarController : MonoBehaviour
         if (currentSpeed > 2.01f || currentSpeed < -2.01f)
         {
             HandleSteering();
-            MyGameController.instance.MySoundManager.EngineSound(true);
+            // MyGameController.instance.MySoundManager.EngineSound(true);
             UpdateDriverAnimator(true);
         }
         else
         {
-            MyGameController.instance.MySoundManager.EngineSound(false);
+            // MyGameController.instance.MySoundManager.EngineSound(false);
             UpdateDriverAnimator(false);
         }
         //MyGameController.instance.MySoundManager.EngineSound(moveInput != 0 ? true : false);
@@ -159,6 +159,7 @@ public class MyCarController : MonoBehaviour
                 isReverse = false;
                 //if (currentSpeed >= -1)
                 //OnReverseUpdateCarChildPosition();
+                MyGameController.instance.MySoundManager.EngineSound(true);
             }
             else
             {
@@ -168,6 +169,7 @@ public class MyCarController : MonoBehaviour
                     isBrakeing = true;
                     isReverse = false;
                     //OnReverseUpdateCarChildPosition();
+                    MyGameController.instance.MySoundManager.EngineSound(false);
                 }
                 else
                 {
@@ -176,6 +178,7 @@ public class MyCarController : MonoBehaviour
                     isReverse = true;
                     //if (!blockControl && currentSpeed <= -1)
                     //OnReverseUpdateCarChildPosition();
+                    MyGameController.instance.MySoundManager.EngineSound(true);
                 }
 
             }
@@ -185,6 +188,7 @@ public class MyCarController : MonoBehaviour
         {
             currentSpeed = Mathf.Lerp(currentSpeed, 0, deceleration * Time.deltaTime);
             isBrakeing = false;
+            MyGameController.instance.MySoundManager.EngineSound(false);
         }
 
         /*if (currentSpeed > 7.01f || currentSpeed < -7.01f)
@@ -251,6 +255,14 @@ public class MyCarController : MonoBehaviour
             {
                 currentSpeed *= 1 - (Mathf.Abs(turnInput) * driftFactor * Time.deltaTime);
             }
+            if (!enableOilSpillEffect && (currentSpeed > 10f || currentSpeed < -10f))
+            {
+                MyGameController.instance.MySoundManager.DriftSound(true);
+            }
+            else
+            {
+                MyGameController.instance.MySoundManager.DriftSound(false);
+            }
         }
         else
         {
@@ -258,6 +270,7 @@ public class MyCarController : MonoBehaviour
             rotationToDrift = Quaternion.Euler(0, turnInput * turningAngleOnChild, 0);
             myChildCar.localRotation = Quaternion.Lerp(myChildCar.localRotation, rotationToDrift, driftControlWhenNoDrift * Time.deltaTime);
             isDrifting = false;
+            MyGameController.instance.MySoundManager.DriftSound(false);
         }
 
         carVFX.UpdateTrail(isDrifting);
@@ -294,6 +307,7 @@ public class MyCarController : MonoBehaviour
             }
             MyGameController.instance.MyManager.OnBoostNitroEnableSpeedEffect();
             carVFX.UpdateBoost(isBoosting);
+            MyGameController.instance.MySoundManager.EngineSound(false);
         }
 
         // Reset speed after boost duration
@@ -367,22 +381,23 @@ public class MyCarController : MonoBehaviour
         nextBoostTime = 0;
     }
 
-    /*private void OnTriggerEnter(Collider other)
-    {
-        return;
-        if (other.gameObject.CompareTag("carAI"))
-        {
-            if (!isBoosting)
-            {
-                currentSpeed *= brakeFactor;
-            }
-            Vector3 dir = other.transform.position - transform.position;
-            Vector3 hitPoint = other.ClosestPoint(other.transform.position);
-            hitPoint.y += 1;
-            other.gameObject.GetComponent<AITrafficCar>().HideAfterAccident(dir, hitPoint);
-        }
-    }*/
+    // private void OnTriggerEnter(Collider other)
+    // {
+    //     // return;
+    //     // if (other.gameObject.CompareTag("carAI"))
+    //     // {
+    //     //     if (!isBoosting)
+    //     //     {
+    //     //         currentSpeed *= brakeFactor;
+    //     //     }
+    //     //     Vector3 dir = other.transform.position - transform.position;
+    //     //     Vector3 hitPoint = other.ClosestPoint(other.transform.position);
+    //     //     hitPoint.y += 1;
+    //     //     other.gameObject.GetComponent<AITrafficCar>().HideAfterAccident(dir, hitPoint);
+    //     // }
+    // }
 
+    private Collision lastColisionCar;
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("carAI"))
@@ -390,11 +405,18 @@ public class MyCarController : MonoBehaviour
             if (!isBoosting)
             {
                 currentSpeed *= brakeFactor;
+                if (!ReferenceEquals(lastColisionCar, collision))
+                {
+                    MyGameController.instance.MySoundManager.PlayCrashCar();
+                }
             }
 
             //Vector3 hitPoint = collision.GetContact(0).point;
             //Vector3 dir = hitPoint - transform.position;
             //collision.gameObject.GetComponent<AITrafficCar>().HideAfterAccident(dir, hitPoint);
+            lastColisionCar = collision;
+            CancelInvoke("CarCrashSoundAfterHitSameCar");
+            Invoke("CarCrashSoundAfterHitSameCar", 3f);
         }
         else if (collision.gameObject.CompareTag("jump_Platform"))
         {
@@ -402,6 +424,10 @@ public class MyCarController : MonoBehaviour
             // Quaternion deltaRotation = Quaternion.Euler(60, 0, 0);
             // myRigidbody.rotation = myRigidbody.rotation * deltaRotation;
         }
+    }
+    void CarCrashSoundAfterHitSameCar()
+    {
+        lastColisionCar = null;
     }
 
     // void OnCollisionExit(Collision collision)

@@ -8,12 +8,15 @@ public class MySoundManager : MonoBehaviour
     public AudioSource sourceOne;
     public AudioSource source_RaceTrack;
     public AudioSource source_Engine;
-    public AudioSource source_Wind;
+    public AudioSource source_Wind; // also used for drift sound
     public AudioSource source_HomeBackground;
 
     public AudioClip engine;
     public AudioClip wohooo;
     public AudioClip wind;
+    public AudioClip beep321;
+    public AudioClip drift;
+    public AudioClip crashCar;
 
     [Space(10)]
     public Image soundImage;
@@ -81,10 +84,9 @@ public class MySoundManager : MonoBehaviour
 
     public void EngineSound(bool toPlay)
     {
-        return;
         if (toPlay && PlayerPrefsX.GetBool(Utility.KEY_SOUND, true))
         {
-            if(!source_Engine.isPlaying)
+            if (!source_Engine.isPlaying)
                 source_Engine.Play();
         }
         else
@@ -98,11 +100,29 @@ public class MySoundManager : MonoBehaviour
     {
         if (toPlay && PlayerPrefsX.GetBool(Utility.KEY_SOUND, true))
         {
+            source_Wind.clip = wind;
+            source_Wind.volume = 0.7f;
             source_Wind.Play();
         }
         else
         {
             source_Wind.Stop();
+        }
+    }
+
+    public void DriftSound(bool toPlay)
+    {
+        if (toPlay && PlayerPrefsX.GetBool(Utility.KEY_SOUND, true))
+        {
+            source_Wind.clip = drift;
+            source_Wind.volume = 0.3f;
+            if (!source_Wind.isPlaying)
+                source_Wind.Play();
+        }
+        else
+        {
+            if (source_Wind.clip == drift && source_Wind.isPlaying)
+                source_Wind.Stop();
         }
     }
 
@@ -116,5 +136,13 @@ public class MySoundManager : MonoBehaviour
     public void PlayWohooo()
     {
         PlayOneShot(wohooo);
+    }
+    public void PlayBeep321()
+    {
+        PlayOneShot(beep321);
+    }
+    public void PlayCrashCar()
+    {
+        PlayOneShot(crashCar);
     }
 }

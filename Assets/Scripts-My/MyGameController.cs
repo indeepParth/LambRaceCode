@@ -312,22 +312,26 @@ public class MyGameController : MonoBehaviour
     {
         textCountDown321.text = "3";
         textCountDown321.gameObject.SetActive(true);
+        MySoundManager.PlayBeep321();
 
         textCountDown321.transform.DOScale(Vector3.one * 1.5f, 0.5f).SetEase(easeType).OnComplete(() =>
         {
             textCountDown321.transform.DOScale(Vector3.one, 0.5f).SetEase(easeType).OnComplete(() =>
             {
                 textCountDown321.text = "2";
+                MySoundManager.PlayBeep321();
                 textCountDown321.transform.DOScale(Vector3.one * 1.5f, 0.5f).SetEase(easeType).OnComplete(() =>
                 {
                     textCountDown321.transform.DOScale(Vector3.one, 0.5f).SetEase(easeType).OnComplete(() =>
                     {
                         textCountDown321.text = "1";
+                        MySoundManager.PlayBeep321();
                         textCountDown321.transform.DOScale(Vector3.one * 1.5f, 0.5f).SetEase(easeType).OnComplete(() =>
                         {
                             textCountDown321.transform.DOScale(Vector3.one, 0.5f).SetEase(easeType).OnComplete(() =>
                             {
                                 textCountDown321.text = "GO";
+                                MySoundManager.PlayBeep321();
                                 textCountDown321.transform.DOScale(Vector3.one * 1.5f, 0.5f).SetEase(easeType).OnComplete(() =>
                                 {
                                     textCountDown321.transform.DOScale(Vector3.one, 0.5f).SetEase(easeType).OnComplete(() =>
