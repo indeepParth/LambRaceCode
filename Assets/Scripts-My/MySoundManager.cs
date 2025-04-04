@@ -17,6 +17,7 @@ public class MySoundManager : MonoBehaviour
     public AudioClip beep321;
     public AudioClip drift;
     public AudioClip crashCar;
+    public AudioClip breakSound;
 
     [Space(10)]
     public Image soundImage;
@@ -122,6 +123,22 @@ public class MySoundManager : MonoBehaviour
         else
         {
             if (source_Wind.clip == drift && source_Wind.isPlaying)
+                source_Wind.Stop();
+        }
+    }
+
+    public void BreakSound(bool toPlay)
+    {
+        if (toPlay && PlayerPrefsX.GetBool(Utility.KEY_SOUND, true))
+        {
+            source_Wind.clip = breakSound;
+            source_Wind.volume = 0.2f;
+            if (!source_Wind.isPlaying)
+                source_Wind.Play();
+        }
+        else
+        {
+            if (source_Wind.clip == breakSound && source_Wind.isPlaying)
                 source_Wind.Stop();
         }
     }

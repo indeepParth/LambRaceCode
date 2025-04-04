@@ -150,7 +150,7 @@ public class MyCarController : MonoBehaviour
             moveInput = 0;
         }
 
-        if (moveInput != 0)
+        if (moveInput != 0 && !isBoosting && isGrounded)
         {
             if (moveInput > 0)
             {
@@ -160,6 +160,7 @@ public class MyCarController : MonoBehaviour
                 //if (currentSpeed >= -1)
                 //OnReverseUpdateCarChildPosition();
                 MyGameController.instance.MySoundManager.EngineSound(true);
+                MyGameController.instance.MySoundManager.BreakSound(false);
             }
             else
             {
@@ -170,6 +171,7 @@ public class MyCarController : MonoBehaviour
                     isReverse = false;
                     //OnReverseUpdateCarChildPosition();
                     MyGameController.instance.MySoundManager.EngineSound(false);
+                    MyGameController.instance.MySoundManager.BreakSound(true);
                 }
                 else
                 {
@@ -179,6 +181,7 @@ public class MyCarController : MonoBehaviour
                     //if (!blockControl && currentSpeed <= -1)
                     //OnReverseUpdateCarChildPosition();
                     MyGameController.instance.MySoundManager.EngineSound(true);
+                    MyGameController.instance.MySoundManager.BreakSound(false);
                 }
 
             }
@@ -189,6 +192,7 @@ public class MyCarController : MonoBehaviour
             currentSpeed = Mathf.Lerp(currentSpeed, 0, deceleration * Time.deltaTime);
             isBrakeing = false;
             MyGameController.instance.MySoundManager.EngineSound(false);
+            MyGameController.instance.MySoundManager.BreakSound(false);
         }
 
         /*if (currentSpeed > 7.01f || currentSpeed < -7.01f)
@@ -246,7 +250,7 @@ public class MyCarController : MonoBehaviour
         }
 
         // Handle drifting
-        if ((Input.GetKey(KeyCode.Space) || enableOilSpillEffect) && (isDrifting || Mathf.Abs(turnInput) > 0.5f) && (isDrifting || currentSpeed > maxSpeed * 0.5f)) // Drift when turning sharply and at higher speeds
+        if (isGrounded && !isBoosting && (Input.GetKey(KeyCode.Space) || enableOilSpillEffect) && (isDrifting || Mathf.Abs(turnInput) > 0.5f) && (isDrifting || currentSpeed > maxSpeed * 0.5f)) // Drift when turning sharply and at higher speeds
         {
             isDrifting = true;
             rotationToDrift = Quaternion.Euler(0, turnInput * driftAngle, 0);
@@ -308,6 +312,7 @@ public class MyCarController : MonoBehaviour
             MyGameController.instance.MyManager.OnBoostNitroEnableSpeedEffect();
             carVFX.UpdateBoost(isBoosting);
             MyGameController.instance.MySoundManager.EngineSound(false);
+            MyGameController.instance.MySoundManager.BreakSound(false);
         }
 
         // Reset speed after boost duration
@@ -418,10 +423,16 @@ public class MyCarController : MonoBehaviour
             CancelInvoke("CarCrashSoundAfterHitSameCar");
             Invoke("CarCrashSoundAfterHitSameCar", 3f);
         }
+        else if (collision.gameObject.CompareTag("propOnRoad"))
+        {
+            MyGameController.instance.MySoundManager.PlayCrashCar();
+            lastColisionCar = collision;
+            CancelInvoke("CarCrashSoundAfterHitSameCar");
+        }
         else if (collision.gameObject.CompareTag("jump_Platform"))
         {
             JumpEffectStart();
-            // Quaternion deltaRotation = Quaternion.Euler(60, 0, 0);
+            // Quaternion deltaRotation = Quaternion.Euler(60, 0, 0); propOnRoad
             // myRigidbody.rotation = myRigidbody.rotation * deltaRotation;
         }
     }
