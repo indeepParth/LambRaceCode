@@ -30,6 +30,9 @@ public class CharacterInfo : MonoBehaviour
                 return;
             }
 
+        if(MyGameController.instance.MyManager == null || MyGameController.instance.MyManager.carLamb == null)
+            return;
+
         float distance = Vector3.Distance(transform.position, MyGameController.instance.MyManager.carLamb.position);
         if(distance < distToLook)
         {

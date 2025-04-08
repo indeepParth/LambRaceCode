@@ -184,7 +184,7 @@ public class MyGameController : MonoBehaviour
         PlayFabLogin.GameWonRewardEvent((respoce) =>
         {
             PlayFabLogin.SubmitBestHeartOnDropPessanger(bestHeart);
-            UpdateHeartPoint(respoce);
+            UpdateHeartPoint(bestHeart);
         });
     }
     public void UpdateHeartPoint(int respoce)
@@ -230,6 +230,7 @@ public class MyGameController : MonoBehaviour
         isGameStart = false;
         countDownTime = timer;
         counterUpTime = 0;
+        UpdateHeartPoint(0);
     }
 
     public void RestartGame()

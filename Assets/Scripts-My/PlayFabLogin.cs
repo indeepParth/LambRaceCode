@@ -53,18 +53,19 @@ public class PlayFabLogin : MonoBehaviour
         if (result != null) // && !result.NewlyCreated)
         {
             StorePlayFabID(result.PlayFabId);
-            if (!result.NewlyCreated)
-            {
-                FetchPlayerDataFromGS((respoce) =>
-                {
-                    Debug.Log("heart = " + respoce);
-                    MyGameController.instance.UpdateHeartPoint(respoce);
-                });
-            }
-            else
-            {
-                MyGameController.instance.UpdateHeartPoint(0);
-            }
+            MyGameController.instance.UpdateHeartPoint(0);
+            // if (!result.NewlyCreated)
+            // {
+            //     FetchPlayerDataFromGS((respoce) =>
+            //     {
+            //         Debug.Log("heart = " + respoce);
+            //         MyGameController.instance.UpdateHeartPoint(respoce);
+            //     });
+            // }
+            // else
+            // {
+            //     MyGameController.instance.UpdateHeartPoint(0);
+            // }
 
             updateNameCounter = 0;
             // UpdatePlayerDetails(GetStoredPlayerName(), null);
