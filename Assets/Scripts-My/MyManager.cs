@@ -33,6 +33,7 @@ public class MyManager : MonoBehaviour
 
     public GameObject grandPrixCheckPoints;
     public TextMeshPro textStartFinish;
+    public MinimapTracker minimapTracker;
 
     public Transform flagStartObject;
     public GameStartPosition[] gameStartPositions;

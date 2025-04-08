@@ -101,6 +101,7 @@ public class UIManager : MonoBehaviour
             MyGameController.instance.MyManager.textStartFinish.text = "<sprite=1> GRAND PRIX <sprite=1>";
             // MyGameController.instance.MyManager.textStartFinish.gameObject.SetActive(true);
             MyGameController.instance.MyManager.grandPrixCheckPoints.SetActive(true);
+            MyGameController.instance.MyManager.minimapTracker.gameObject.SetActive(true);
         });
     }
 
@@ -176,6 +177,7 @@ public class UIManager : MonoBehaviour
                 gameGrandPrixPanel.SetActive(true);
                 MyGameController.instance.MyManager.textStartFinish.text = "<sprite=1> GRAND PRIX <sprite=1>";
                 MyGameController.instance.MyManager.grandPrixCheckPoints.SetActive(true);
+                MyGameController.instance.MyManager.minimapTracker.gameObject.SetActive(true);
             }
             else if (MyGameController.instance.gameMode == GameMode.DateRush)
             {
