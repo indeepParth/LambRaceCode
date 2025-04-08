@@ -423,11 +423,15 @@ public class MyCarController : MonoBehaviour
             CancelInvoke("CarCrashSoundAfterHitSameCar");
             Invoke("CarCrashSoundAfterHitSameCar", 3f);
         }
-        else if (collision.gameObject.CompareTag("propOnRoad"))
+        else if (collision.gameObject.CompareTag("prop"))
         {
-            MyGameController.instance.MySoundManager.PlayCrashCar();
+            if (!ReferenceEquals(lastColisionCar, collision))
+            {
+                MyGameController.instance.MySoundManager.PlayCrashCar();
+            }
             lastColisionCar = collision;
             CancelInvoke("CarCrashSoundAfterHitSameCar");
+            Invoke("CarCrashSoundAfterHitSameCar", 3f);
         }
         else if (collision.gameObject.CompareTag("jump_Platform"))
         {
