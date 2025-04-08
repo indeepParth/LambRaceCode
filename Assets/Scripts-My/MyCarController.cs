@@ -504,15 +504,27 @@ public class MyCarController : MonoBehaviour
                 oilTweeenStarts = true;
                 float valFloat = 0f;
                 float timeRandom = UnityEngine.Random.Range(0.4f, 0.6f);
-                bool isright = timeRandom > 0.5f ? true : false;
+                bool isright = timeRandom > 0.5f ? true : false;       
+                Timer.Schedule(this, isright ? 0 : timeRandom, () =>
+                {
+                    MyGameController.instance.MySoundManager.PlayOilSlipCar();
+                });
                 DOTween.To(() => valFloat, x => valFloat = x, oilSlipInput, timeRandom).SetDelay(isright ? 0 : timeRandom).OnUpdate(() => { oilSlipFactor = valFloat; })
                 .OnComplete(() =>
                 {
                     timeRandom = UnityEngine.Random.Range(0.3f, 0.6f);
+                    Timer.Schedule(this, isright ? 0 : timeRandom, () =>
+                    {
+                        MyGameController.instance.MySoundManager.PlayOilSlipCar();
+                    });
                     DOTween.To(() => valFloat, x => valFloat = x, -oilSlipInput, timeRandom).SetDelay(!isright ? 0 : timeRandom).OnUpdate(() => { oilSlipFactor = valFloat; })
                     .OnComplete(() =>
                     {
                         timeRandom = UnityEngine.Random.Range(0.2f, 0.6f);
+                        Timer.Schedule(this, timeRandom, () =>
+                        {
+                            MyGameController.instance.MySoundManager.PlayOilSlipCar();
+                        });
                         DOTween.To(() => valFloat, x => valFloat = x, oilSlipInput, timeRandom).SetDelay(timeRandom).OnUpdate(() => { oilSlipFactor = valFloat; })
                         .OnComplete(() =>
                         {

@@ -9,7 +9,8 @@ public class OilSpillCoiilder : MonoBehaviour
     {
         if (other.gameObject.CompareTag("car"))
         {
-            MyGameController.instance.MyManager.carLambController.enableOilSpillEffect = true;           
+            MyGameController.instance.MyManager.carLambController.enableOilSpillEffect = true;
+            // MyGameController.instance.MySoundManager.PlayOilSlipCar();
         }
     }
 }

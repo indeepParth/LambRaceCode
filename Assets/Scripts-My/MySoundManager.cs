@@ -18,6 +18,7 @@ public class MySoundManager : MonoBehaviour
     public AudioClip drift;
     public AudioClip crashCar;
     public AudioClip breakSound;
+    public AudioClip oilSlip;
 
     [Space(10)]
     public Image soundImage;
@@ -161,5 +162,9 @@ public class MySoundManager : MonoBehaviour
     public void PlayCrashCar()
     {
         PlayOneShot(crashCar);
+    }
+    public void PlayOilSlipCar()
+    {
+        PlayOneShot(oilSlip);
     }
 }
