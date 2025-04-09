@@ -25,6 +25,13 @@ public class MySoundManager : MonoBehaviour
     public Sprite soundOnImage;
     public Sprite soundOffImage;
 
+    [Space(10)]
+    [Header("Engine Sound Settings")]
+    public float minPitch = 0.8f;  // Idle pitch
+    public float maxPitch = 2.0f;  // Max pitch at top speed
+    public float topSpeed = 100f;  // Speed at which pitch is maxed out
+    private bool isEnginePlaying = false;
+
     void Awake()
     {
         if (PlayerPrefsX.GetBool(Utility.KEY_SOUND, true))
@@ -88,13 +95,25 @@ public class MySoundManager : MonoBehaviour
     {
         if (toPlay && PlayerPrefsX.GetBool(Utility.KEY_SOUND, true))
         {
+            isEnginePlaying = true;
             if (!source_Engine.isPlaying)
                 source_Engine.Play();
         }
         else
         {
+            isEnginePlaying = false;
             if (source_Engine.isPlaying)
                 source_Engine.Stop();
+        }
+    }
+    void Update()
+    {
+        if (isEnginePlaying && PlayerPrefsX.GetBool(Utility.KEY_SOUND, true) && MyGameController.instance.isGameStart && !MyGameController.instance.isGameOver)
+        {
+            float speed = MyGameController.instance.MyManager.carLambRigidbody.velocity.magnitude;
+            // Normalize speed and map it to pitch range
+            float pitch = Mathf.Lerp(minPitch, maxPitch, speed / topSpeed);
+            source_Engine.pitch = pitch;
         }
     }
 
