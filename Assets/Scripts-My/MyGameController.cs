@@ -231,6 +231,7 @@ public class MyGameController : MonoBehaviour
         countDownTime = timer;
         counterUpTime = 0;
         UpdateHeartPoint(0);
+        MySoundManager.EngineSound(false);
     }
 
     public void RestartGame()
