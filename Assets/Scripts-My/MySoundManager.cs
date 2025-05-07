@@ -34,6 +34,7 @@ public class MySoundManager : MonoBehaviour
 
     void Awake()
     {
+        source_Engine.loop = true;
         if (PlayerPrefsX.GetBool(Utility.KEY_SOUND, true))
         {
             soundImage.sprite = soundOnImage;
@@ -103,7 +104,7 @@ public class MySoundManager : MonoBehaviour
         {
             isEnginePlaying = false;
             if (source_Engine.isPlaying)
-                source_Engine.Stop();
+                source_Engine.Pause();
         }
     }
     void Update()
