@@ -111,7 +111,7 @@ public class MySoundManager : MonoBehaviour
     {
         if (isEnginePlaying && PlayerPrefsX.GetBool(Utility.KEY_SOUND, true) && MyGameController.instance.isGameStart && !MyGameController.instance.isGameOver)
         {
-            float speed = MyGameController.instance.MyManager.carLambRigidbody.velocity.magnitude;
+            float speed = MyGameController.instance.MyManager.carLambController.currentSpeed;//.carLambRigidbody.velocity.magnitude;
             // Normalize speed and map it to pitch range
             float pitch = Mathf.Lerp(minPitch, maxPitch, speed / topSpeed);
             source_Engine.pitch = pitch;

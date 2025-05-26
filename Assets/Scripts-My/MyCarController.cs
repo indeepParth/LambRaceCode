@@ -9,9 +9,30 @@ public enum PowerUpEnum
     TimeBonus,
     Booster
 }
+public enum CarSpeedEnum
+{
+    Slow,
+    Normal,
+    Fast,
+    SuperFast
+}
+[Serializable]
+public class CarSpeedStatus
+{
+    public float acceleration = 30f;
+    public float maxSpeed = 60f;
+    public float engineSoundPitch = 1;
+}
 
 public class MyCarController : MonoBehaviour
 {
+    [Header("Car Speed Status")]
+    public CarSpeedEnum carSpeedEnum = CarSpeedEnum.Slow;
+    public CarSpeedStatus carSpeedStatusStandBy;
+    public CarSpeedStatus carSpeedStatusNormal;
+    public CarSpeedStatus carSpeedStatusFast;
+    public CarSpeedStatus carSpeedStatusSuperFast;
+    [Header("Other Car Settings")]
     public Transform myChildCar;
     public Rigidbody myRigidbody;
     public BoxCollider boxCollider;
@@ -90,7 +111,11 @@ public class MyCarController : MonoBehaviour
     private void FixedUpdate()
     {
         if (!MyGameController.instance.isGameStart)
-            return;      
+            return;
+
+        acceleration = GetCarSpeedStatus().acceleration;
+        maxSpeed = GetCarSpeedStatus().maxSpeed;
+        MyGameController.instance.MySoundManager.maxPitch = GetCarSpeedStatus().engineSoundPitch;
 
         if (jumpEffect) { JumpBoostEffectEnd(); }
         HandleMovement();
@@ -231,6 +256,7 @@ public class MyCarController : MonoBehaviour
                 // Debug.Log("Forward");
             }
         }
+        SetCarSpeedEnum(currentSpeed);
         //transform.position += forward;
         // myRigidbody.MovePosition(transform.position + forward);
         myRigidbody.AddForce(forward * forceCar, ForceMode.Impulse);
@@ -504,7 +530,7 @@ public class MyCarController : MonoBehaviour
                 oilTweeenStarts = true;
                 float valFloat = 0f;
                 float timeRandom = UnityEngine.Random.Range(0.4f, 0.6f);
-                bool isright = timeRandom > 0.5f ? true : false;       
+                bool isright = timeRandom > 0.5f ? true : false;
                 Timer.Schedule(this, isright ? 0 : timeRandom, () =>
                 {
                     MyGameController.instance.MySoundManager.PlayOilSlipCar();
@@ -648,5 +674,68 @@ public class MyCarController : MonoBehaviour
     private void UpdateDriverAnimator(bool isDriving)
     {
         driverAnimator.SetBool("driving", isDriving);
+    }
+
+    public void SetCarSpeedEnum(float carSpeed)
+    {
+        int speed = SpeedInHour.ToInt();
+
+        if (speed <= 40)
+        {
+            MyGameController.instance.MyManager.HighSpeedEffect(false);
+            if (carSpeedEnum == CarSpeedEnum.Slow)
+                return; // No change needed
+            Debug.Log("Car Speed Enum: StandBy = " + speed);
+            carSpeedEnum = CarSpeedEnum.Slow;
+        }
+        else if (speed > 40 && speed <= 100)
+        {
+            MyGameController.instance.MyManager.HighSpeedEffect(false);
+            if (carSpeedEnum == CarSpeedEnum.Normal)
+                return; // No change needed
+            Debug.Log("Car Speed Enum: Normal = " + speed);
+            carSpeedEnum = CarSpeedEnum.Normal;
+        }
+        else if (speed > 100 && speed <= 272)
+        {
+            MyGameController.instance.MyManager.HighSpeedEffect(false);
+            if (carSpeedEnum == CarSpeedEnum.Fast)
+                return; // No change needed
+            Debug.Log("Car Speed Enum: Fast = " + speed);
+            carSpeedEnum = CarSpeedEnum.Fast;
+            
+        }
+        else if (speed > 272)
+        {
+            MyGameController.instance.MyManager.HighSpeedEffect(true);
+            if (carSpeedEnum == CarSpeedEnum.SuperFast)
+                return; // No change needed
+            Debug.Log("Car Speed Enum: SuperFast = " + speed);
+            carSpeedEnum = CarSpeedEnum.SuperFast;
+            
+        }
+        
+    }
+
+    public CarSpeedStatus GetCarSpeedStatus()
+    {
+        CarSpeedStatus carSpeedStatus = null;
+        switch (carSpeedEnum)
+        {
+            case CarSpeedEnum.Normal:
+                carSpeedStatus = carSpeedStatusNormal;
+                break;
+            case CarSpeedEnum.Fast:
+                carSpeedStatus = carSpeedStatusFast;
+                break;
+            case CarSpeedEnum.SuperFast:
+                carSpeedStatus = carSpeedStatusSuperFast;
+                break;
+            default:
+                carSpeedStatus = carSpeedStatusStandBy;
+                break;
+        }
+
+        return carSpeedStatus;
     }
 }

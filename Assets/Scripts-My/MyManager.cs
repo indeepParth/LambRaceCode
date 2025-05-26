@@ -38,12 +38,31 @@ public class MyManager : MonoBehaviour
     public Transform flagStartObject;
     public GameStartPosition[] gameStartPositions;
 
+    ChromaticAberration chromaticAberration;
+    LensDistortion distortion;
+    DepthOfField depthOfField;
+    public float speedEffectTime = 10f;
+
     public bool nitro = false;
     private void OnEnable()
     {
         SetPositionOfGameStart();
         MyGameController.instance.MyCarStateUI.carLambController = carLambController;
         MyGameController.instance.MyCarStateUI.InitializeCar();
+
+        if (m_Volume.profile.TryGetSettings(out chromaticAberration))
+        {
+            chromaticAberration.intensity.value = 0f;
+        }
+        if (m_Volume.profile.TryGetSettings(out distortion))
+        {
+            distortion.intensity.value = 0f;
+        }
+        if (m_Volume.profile.TryGetSettings(out depthOfField))
+        {
+            depthOfField.focalLength.value = 0f;
+        }
+
     }
 
     private void SetPositionOfGameStart()
@@ -77,6 +96,21 @@ public class MyManager : MonoBehaviour
         //ChromaticAberration chromaticAberration;
         //m_Volume.profile.TryGetSettings(out chromaticAberration);
         //chromaticAberration.active = false;
+    }
+
+    
+    public void HighSpeedEffect(bool isHighSpeed)
+    {
+        if (isHighSpeed)
+        {
+            chromaticAberration.intensity.value = Mathf.Lerp(chromaticAberration.intensity.value, 1f, Time.deltaTime * speedEffectTime);
+            distortion.intensity.value = Mathf.Lerp(distortion.intensity.value, -80f, Time.deltaTime * speedEffectTime);
+        }
+        else
+        {
+            chromaticAberration.intensity.value = Mathf.Lerp(chromaticAberration.intensity.value, 0f, Time.deltaTime * speedEffectTime * 1);
+            distortion.intensity.value = Mathf.Lerp(distortion.intensity.value, 0f, Time.deltaTime * speedEffectTime * 1);
+        }
     }
 
 }
