@@ -10236,7 +10236,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8593658991459588394
 Transform:
   m_ObjectHideFlags: 0
@@ -10313,6 +10313,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 391d75a15e0c1fe47bf6390cc62aa41f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  carSpeedEnum: 0
+  carSpeedStatusStandBy:
+    acceleration: 30
+    maxSpeed: 60
+    engineSoundPitch: 1
+    chromaticAberrationValue: 0
+    distortionValue: 0
+  carSpeedStatusNormal:
+    acceleration: 12
+    maxSpeed: 20
+    engineSoundPitch: 1
+    chromaticAberrationValue: 0.1
+    distortionValue: -10
+  carSpeedStatusFast:
+    acceleration: 12
+    maxSpeed: 55
+    engineSoundPitch: 1
+    chromaticAberrationValue: 0.3
+    distortionValue: -30
+  carSpeedStatusSuperFast:
+    acceleration: 12
+    maxSpeed: 60
+    engineSoundPitch: 1
+    chromaticAberrationValue: 1
+    distortionValue: -80
   myChildCar: {fileID: 4668240365528824498}
   myRigidbody: {fileID: 2812370914224931505}
   boxCollider: {fileID: 3274979402661684148}

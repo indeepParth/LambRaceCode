@@ -101,16 +101,19 @@ public class MyManager : MonoBehaviour
     
     public void HighSpeedEffect(bool isHighSpeed)
     {
-        if (isHighSpeed)
-        {
-            chromaticAberration.intensity.value = Mathf.Lerp(chromaticAberration.intensity.value, 1f, Time.deltaTime * speedEffectTime);
-            distortion.intensity.value = Mathf.Lerp(distortion.intensity.value, -80f, Time.deltaTime * speedEffectTime);
-        }
-        else
-        {
-            chromaticAberration.intensity.value = Mathf.Lerp(chromaticAberration.intensity.value, 0f, Time.deltaTime * speedEffectTime * 1);
-            distortion.intensity.value = Mathf.Lerp(distortion.intensity.value, 0f, Time.deltaTime * speedEffectTime * 1);
-        }
+        
+        chromaticAberration.intensity.value = Mathf.Lerp(chromaticAberration.intensity.value, carLambController.GetCarSpeedStatus().chromaticAberrationValue, Time.deltaTime * speedEffectTime);
+        distortion.intensity.value = Mathf.Lerp(distortion.intensity.value, carLambController.GetCarSpeedStatus().distortionValue, Time.deltaTime * speedEffectTime);
+        // if (isHighSpeed)
+        // {
+        //     chromaticAberration.intensity.value = Mathf.Lerp(chromaticAberration.intensity.value, 1f, Time.deltaTime * speedEffectTime);
+        //     distortion.intensity.value = Mathf.Lerp(distortion.intensity.value, -80f, Time.deltaTime * speedEffectTime);
+        // }
+        // else
+        // {
+        //     chromaticAberration.intensity.value = Mathf.Lerp(chromaticAberration.intensity.value, 0f, Time.deltaTime * speedEffectTime * 1);
+        //     distortion.intensity.value = Mathf.Lerp(distortion.intensity.value, 0f, Time.deltaTime * speedEffectTime * 1);
+        // }
     }
 
 }

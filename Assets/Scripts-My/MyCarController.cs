@@ -22,6 +22,8 @@ public class CarSpeedStatus
     public float acceleration = 30f;
     public float maxSpeed = 60f;
     public float engineSoundPitch = 1;
+    public float chromaticAberrationValue = 0;
+    public float distortionValue = 0;
 }
 
 public class MyCarController : MonoBehaviour
