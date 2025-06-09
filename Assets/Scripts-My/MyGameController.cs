@@ -367,5 +367,5 @@ public static class CarParamsConstants
 {
     //CarParams constants
     public const float MPHMult = 2.23693629f;
-    public const float KPHMult = 5.3333f; //3.6f;
+    public const float KPHMult = 3.2f; // 5.3333f; //3.6f;
 }

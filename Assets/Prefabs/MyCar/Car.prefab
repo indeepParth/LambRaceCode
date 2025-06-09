@@ -10316,25 +10316,25 @@ MonoBehaviour:
   carSpeedEnum: 0
   carSpeedStatusStandBy:
     acceleration: 30
-    maxSpeed: 60
+    maxSpeed: 30
     engineSoundPitch: 1
     chromaticAberrationValue: 0
     distortionValue: 0
   carSpeedStatusNormal:
     acceleration: 12
-    maxSpeed: 20
+    maxSpeed: 50
     engineSoundPitch: 1
     chromaticAberrationValue: 0.1
     distortionValue: -10
   carSpeedStatusFast:
     acceleration: 12
-    maxSpeed: 55
+    maxSpeed: 86
     engineSoundPitch: 1
     chromaticAberrationValue: 0.3
     distortionValue: -30
   carSpeedStatusSuperFast:
     acceleration: 12
-    maxSpeed: 60
+    maxSpeed: 100
     engineSoundPitch: 1
     chromaticAberrationValue: 1
     distortionValue: -80

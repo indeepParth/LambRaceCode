@@ -117,6 +117,7 @@ public class MyCarController : MonoBehaviour
 
         acceleration = GetCarSpeedStatus().acceleration;
         maxSpeed = GetCarSpeedStatus().maxSpeed;
+        _maxSpeed = maxSpeed;
         MyGameController.instance.MySoundManager.maxPitch = GetCarSpeedStatus().engineSoundPitch;
 
         if (jumpEffect) { JumpBoostEffectEnd(); }
@@ -193,7 +194,7 @@ public class MyCarController : MonoBehaviour
             {
                 if (currentSpeed >= 1)
                 {
-                    currentSpeed += moveInput * 2 * acceleration * Time.deltaTime;
+                    currentSpeed += moveInput * 2 * (maxSpeed/2) * Time.deltaTime;
                     isBrakeing = true;
                     isReverse = false;
                     //OnReverseUpdateCarChildPosition();
@@ -684,39 +685,21 @@ public class MyCarController : MonoBehaviour
 
         if (speed <= 40)
         {
-            MyGameController.instance.MyManager.HighSpeedEffect(false);
-            if (carSpeedEnum == CarSpeedEnum.Slow)
-                return; // No change needed
-            Debug.Log("Car Speed Enum: StandBy = " + speed);
             carSpeedEnum = CarSpeedEnum.Slow;
         }
         else if (speed > 40 && speed <= 100)
         {
-            MyGameController.instance.MyManager.HighSpeedEffect(false);
-            if (carSpeedEnum == CarSpeedEnum.Normal)
-                return; // No change needed
-            Debug.Log("Car Speed Enum: Normal = " + speed);
             carSpeedEnum = CarSpeedEnum.Normal;
         }
         else if (speed > 100 && speed <= 272)
         {
-            MyGameController.instance.MyManager.HighSpeedEffect(false);
-            if (carSpeedEnum == CarSpeedEnum.Fast)
-                return; // No change needed
-            Debug.Log("Car Speed Enum: Fast = " + speed);
-            carSpeedEnum = CarSpeedEnum.Fast;
-            
+            carSpeedEnum = CarSpeedEnum.Fast;            
         }
         else if (speed > 272)
         {
-            MyGameController.instance.MyManager.HighSpeedEffect(true);
-            if (carSpeedEnum == CarSpeedEnum.SuperFast)
-                return; // No change needed
-            Debug.Log("Car Speed Enum: SuperFast = " + speed);
-            carSpeedEnum = CarSpeedEnum.SuperFast;
-            
+            carSpeedEnum = CarSpeedEnum.SuperFast;            
         }
-        
+        MyGameController.instance.MyManager.HighSpeedEffect(true);
     }
 
     public CarSpeedStatus GetCarSpeedStatus()
