@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 using UnityEngine.UI;
+using System;
 
 public class UIManager : MonoBehaviour
 {
@@ -17,10 +18,13 @@ public class UIManager : MonoBehaviour
     [Header("Date Rush")]
     public TextMeshProUGUI countDownText;
     public TextMeshProUGUI timeBonusTextAnimAdd;
+    public GameObject dateRushOverObject;
 
     [Space(2)]
     [Header("Grand Prix")]
     public TextMeshProUGUI counterUPText;
+    public GameObject grandPrixOverObject;
+    public TextMeshProUGUI lapTimeOverText;
 
     [Space(2)]
     [Header("Other")]
@@ -148,9 +152,10 @@ public class UIManager : MonoBehaviour
         countDownText.text = time.ToString() + "s";
     }
 
-    public void UpdateCounterUpTimer(int time) // grand prix mode
+    public void UpdateCounterUpTimer(float time) // grand prix mode
     {
-        counterUPText.text = time.ToString() + "s";
+        TimeSpan timeSpan = TimeSpan.FromSeconds(time);
+        counterUPText.text = timeSpan.ToString(@"hh\:mm\:ss");
     }
 
     // Over UI
@@ -196,6 +201,18 @@ public class UIManager : MonoBehaviour
         gameDateRushPanel.SetActive(false);
         gameFreeRidePanel.SetActive(false);
         gameGrandPrixPanel.SetActive(false);
+        if (MyGameController.instance.gameMode == GameMode.GrandPrix)
+        {
+            TimeSpan timeSpan = TimeSpan.FromSeconds(MyGameController.instance.counterUpTime);
+            lapTimeOverText.text = "Lap completed in\n" + timeSpan.ToString(@"hh\:mm\:ss");
+            dateRushOverObject.SetActive(false);
+            grandPrixOverObject.SetActive(true);
+        }
+        else
+        {
+            grandPrixOverObject.SetActive(false);
+            dateRushOverObject.SetActive(true);
+        }
         gameOverPanel.SetActive(true);
         MyGameController.instance.MyManager.pickupDropPassangerManager.PickupDropPoint.SetActive(false);
     }

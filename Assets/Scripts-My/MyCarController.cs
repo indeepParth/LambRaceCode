@@ -678,7 +678,7 @@ public class MyCarController : MonoBehaviour
                     MyGameController.instance.MySoundManager.RaceTrackSound(false);
                     MyGameController.instance.MyManager.carLambController.UpdateBlockControl(true);
                     MyGameController.instance.UIManager.ShowGameOver();
-                    MyGameController.instance.PlayFabLogin.SubmitLapsTimeOnGameOver(MyGameController.instance.counterUpTime);
+                    MyGameController.instance.PlayFabLogin.SubmitLapsTimeOnGameOver((int)MyGameController.instance.counterUpTime);
                 }
                 break;
         }

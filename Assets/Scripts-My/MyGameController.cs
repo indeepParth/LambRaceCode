@@ -159,7 +159,7 @@ public class MyGameController : MonoBehaviour
     public int countDownTime = 120;
     public int increaseTimeReward = 60;
     float t = 0;
-    public int counterUpTime = 0;
+    public float counterUpTime = 0;
 
     public bool isGameOver;
     public bool isGameStart;
@@ -278,13 +278,15 @@ public class MyGameController : MonoBehaviour
         }
         else if (gameMode == GameMode.GrandPrix && isGameStart)
         {
-            t = t + Time.deltaTime;
-            if (t >= 1)
-            {
-                t = 0;
-                counterUpTime = counterUpTime + 1;
-                UIManager.UpdateCounterUpTimer(counterUpTime);
-            }
+            counterUpTime = counterUpTime + Time.deltaTime;
+            UIManager.UpdateCounterUpTimer(counterUpTime);
+            // t = t + Time.deltaTime;
+            // if (t >= 1)
+            // {
+            //     t = 0;
+            //     counterUpTime = counterUpTime + 1;
+            //     UIManager.UpdateCounterUpTimer((int)counterUpTime);
+            // }
         }
     }
 
