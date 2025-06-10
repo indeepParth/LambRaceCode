@@ -266,12 +266,14 @@ public class MyCarStateUI : MonoBehaviour
 
     float CarMaxSpeedForGearCalculation()
     {
-        return carLambController.isBoosting? carLambController.maxSpeed : carLambController._maxSpeed;
+        return carLambController.carSpeedStatusSuperFast.maxSpeed;
+        // return carLambController.isBoosting ? carLambController.maxSpeed : carLambController._maxSpeed;
     }
     
     float CarMaxSpeedForSpeedometer()
     {
-        return carLambController._maxSpeed * carLambController.boostMultiplier * speedometerArrowFactor;
+        return carLambController.carSpeedStatusSuperFast.maxSpeed * carLambController.boostMultiplier * speedometerArrowFactor;
+        // return carLambController._maxSpeed * carLambController.boostMultiplier * speedometerArrowFactor;
     }
 
     enum RpmState

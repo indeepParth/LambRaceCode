@@ -10316,28 +10316,32 @@ MonoBehaviour:
   carSpeedEnum: 0
   carSpeedStatusStandBy:
     acceleration: 30
-    maxSpeed: 30
+    maxSpeed: 20
     engineSoundPitch: 1
     chromaticAberrationValue: 0
     distortionValue: 0
+    depthOfFieldValue: 60
   carSpeedStatusNormal:
     acceleration: 12
     maxSpeed: 50
     engineSoundPitch: 1
     chromaticAberrationValue: 0.1
-    distortionValue: -10
+    distortionValue: -30
+    depthOfFieldValue: 65
   carSpeedStatusFast:
     acceleration: 12
-    maxSpeed: 86
+    maxSpeed: 70
     engineSoundPitch: 1
     chromaticAberrationValue: 0.3
-    distortionValue: -30
+    distortionValue: -40
+    depthOfFieldValue: 65
   carSpeedStatusSuperFast:
     acceleration: 12
-    maxSpeed: 100
+    maxSpeed: 80
     engineSoundPitch: 1
     chromaticAberrationValue: 1
     distortionValue: -80
+    depthOfFieldValue: 70
   myChildCar: {fileID: 4668240365528824498}
   myRigidbody: {fileID: 2812370914224931505}
   boxCollider: {fileID: 3274979402661684148}

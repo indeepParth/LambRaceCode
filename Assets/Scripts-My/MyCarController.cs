@@ -24,6 +24,7 @@ public class CarSpeedStatus
     public float engineSoundPitch = 1;
     public float chromaticAberrationValue = 0;
     public float distortionValue = 0;
+    public float depthOfFieldValue = 90;
 }
 
 public class MyCarController : MonoBehaviour
@@ -58,9 +59,14 @@ public class MyCarController : MonoBehaviour
     {
         get
         {
-            return (Mathf.Abs(currentSpeed) * CarParamsConstants.KPHMult);
+            float t = Mathf.Abs(currentSpeed) / (carSpeedStatusSuperFast.maxSpeed);            // 0 → 1
+            float curveT = speedCurve.Evaluate(t);
+            float multiplier = Mathf.Lerp(1f, CarParamsConstants.KPHMult, curveT);
+            // float multiplier = Mathf.Lerp(3f, CarParamsConstants.KPHMult, currentSpeed / carSpeedStatusSuperFast.maxSpeed);
+            return (Mathf.Abs(currentSpeed) * multiplier);
         }
     }
+    public AnimationCurve speedCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
     public float penalty_Sidewalk = 15;
     public float penalty_sand = 10;
@@ -327,8 +333,10 @@ public class MyCarController : MonoBehaviour
         if (!blockControl && !isBoosting && currentSpeed > 0 && Input.GetKeyDown(KeyCode.N) && Time.time > nextBoostTime)
         {
             isBoosting = true;
-            maxSpeed *= boostMultiplier;
-            currentSpeed = maxSpeed; // Apply boost
+            float maxSp = carSpeedStatusSuperFast.maxSpeed;
+            maxSp *= boostMultiplier; // Apply boost multiplier to max speed
+            // maxSpeed *= boostMultiplier;
+            currentSpeed = maxSp; // Apply boost
             boostEndTime = Time.time + boostDuration; // Set the end time for the boost
             if (MyGameController.instance.gameMode != GameMode.FreeRide)
             {
@@ -593,8 +601,10 @@ public class MyCarController : MonoBehaviour
         {
             jumpEffect = true;
             isBoosting = true;
-            maxSpeed *= boostMultiplier;
-            currentSpeed = maxSpeed; // Apply boost
+            float maxSp = carSpeedStatusSuperFast.maxSpeed;
+            maxSp *= boostMultiplier; // Apply boost multiplier to max speed
+            // maxSpeed *= boostMultiplier;
+            currentSpeed = maxSp; // Apply boost
             boostEndTime = Time.time + boostDuration; // Set the end time for the boost            
             MyGameController.instance.MyManager.OnBoostNitroEnableSpeedEffect();
             carVFX.UpdateBoost(isBoosting);
@@ -681,21 +691,21 @@ public class MyCarController : MonoBehaviour
 
     public void SetCarSpeedEnum(float carSpeed)
     {
-        int speed = SpeedInHour.ToInt();
+        // int speed = SpeedInHour.ToInt();
 
-        if (speed <= 40)
+        if (currentSpeed <= 10)
         {
             carSpeedEnum = CarSpeedEnum.Slow;
         }
-        else if (speed > 40 && speed <= 100)
+        else if (currentSpeed > 10 && currentSpeed <= 25)
         {
             carSpeedEnum = CarSpeedEnum.Normal;
         }
-        else if (speed > 100 && speed <= 272)
+        else if (currentSpeed > 25 && currentSpeed <= 68)
         {
             carSpeedEnum = CarSpeedEnum.Fast;            
         }
-        else if (speed > 272)
+        else if (currentSpeed > 68)
         {
             carSpeedEnum = CarSpeedEnum.SuperFast;            
         }

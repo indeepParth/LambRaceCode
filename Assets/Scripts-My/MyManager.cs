@@ -79,7 +79,7 @@ public class MyManager : MonoBehaviour
 
     public void OnBoostNitroEnableSpeedEffect()
     {
-        mainCamera.DOFieldOfView(75, 1);
+        // mainCamera.DOFieldOfView(75, 1);
         MyGameController.instance.UIManager.BoostNitroReaction();
         speedEffectParticle.time = 0;
         speedEffectParticle.Play();
@@ -91,7 +91,7 @@ public class MyManager : MonoBehaviour
     public void DisableSpeedEffect()
     {
         speedEffectParticle.Stop();
-        mainCamera.DOFieldOfView(60, 1);
+        // mainCamera.DOFieldOfView(60, 1);
         MyGameController.instance.MySoundManager.WindSound(false);
         //ChromaticAberration chromaticAberration;
         //m_Volume.profile.TryGetSettings(out chromaticAberration);
@@ -101,7 +101,7 @@ public class MyManager : MonoBehaviour
     
     public void HighSpeedEffect(bool isHighSpeed)
     {
-        
+        mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, carLambController.GetCarSpeedStatus().depthOfFieldValue, Time.deltaTime * speedEffectTime);
         chromaticAberration.intensity.value = Mathf.Lerp(chromaticAberration.intensity.value, carLambController.GetCarSpeedStatus().chromaticAberrationValue, Time.deltaTime * speedEffectTime);
         distortion.intensity.value = Mathf.Lerp(distortion.intensity.value, carLambController.GetCarSpeedStatus().distortionValue, Time.deltaTime * speedEffectTime);
         // if (isHighSpeed)
