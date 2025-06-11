@@ -102,6 +102,7 @@ public class UIManager : MonoBehaviour
             gameGrandPrixPanel.SetActive(true);
             homePanel.SetActive(false);
             IsBoostAvailable(false);
+            UpdateCounterUpTimer(0);
             MyGameController.instance.MyManager.textStartFinish.text = "<sprite=1> GRAND PRIX <sprite=1>";
             // MyGameController.instance.MyManager.textStartFinish.gameObject.SetActive(true);
             MyGameController.instance.MyManager.grandPrixCheckPoints.SetActive(true);
