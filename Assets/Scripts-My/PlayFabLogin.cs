@@ -6,6 +6,7 @@ using UnityEngine;
 using PlayFab.Json;
 using Unity.VisualScripting;
 using System.Linq;
+using System;
 
 public class PlayFabLogin : MonoBehaviour
 {
@@ -347,8 +348,9 @@ public class PlayFabLogin : MonoBehaviour
                         // rank = (entry.Position + 1).ToString();
                         // playerName = entry.DisplayName;
                         // wins = entry.StatValue.ToString();
+                        TimeSpan lapsBestTime = TimeSpan.FromSeconds(entry.StatValue);
                         leaderloardItems.Add(new MyPlayerDetails((entry.Position + 1).ToString()
-                        , entry.DisplayName, entry.StatValue.ToString()));
+                        , entry.DisplayName, lapsBestTime.ToString(@"hh\:mm\:ss")));
                     }
                     callback?.Invoke(leaderloardItems);
                 },
@@ -385,8 +387,9 @@ public class PlayFabLogin : MonoBehaviour
                         // rank = (entry.Position + 1).ToString();
                         // playerName = entry.DisplayName;
                         // wins = entry.StatValue.ToString();
+                        TimeSpan lapsBestTime = TimeSpan.FromSeconds(MathF.Abs(entry.StatValue));
                         leaderloardItems.Add(new MyPlayerDetails((i + 1).ToString()
-                        , entry.DisplayName, (-1 * entry.StatValue).ToString()));
+                        , entry.DisplayName, lapsBestTime.ToString(@"hh\:mm\:ss")));
                     }
                     callback?.Invoke(leaderloardItems);
                 },
