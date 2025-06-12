@@ -209,7 +209,7 @@ public class MyCarController : MonoBehaviour
                 }
                 else
                 {
-                    currentSpeed += moveInput * 0.5f * acceleration * Time.deltaTime;
+                    currentSpeed += moveInput * 1f * acceleration * Time.deltaTime;
                     isBrakeing = false;
                     isReverse = true;
                     //if (!blockControl && currentSpeed <= -1)
@@ -219,7 +219,7 @@ public class MyCarController : MonoBehaviour
                 }
 
             }
-            currentSpeed = Mathf.Clamp(currentSpeed, -maxSpeed * 0.5f, maxSpeed);
+            currentSpeed = Mathf.Clamp(currentSpeed, -maxSpeed * 1f, maxSpeed);
         }
         else if (!isBoosting)
         {
@@ -693,7 +693,11 @@ public class MyCarController : MonoBehaviour
     {
         // int speed = SpeedInHour.ToInt();
 
-        if (currentSpeed <= 10)
+        if (currentSpeed < 0)
+        {
+            carSpeedEnum = CarSpeedEnum.Slow;
+        }
+        else if (currentSpeed <= 10)
         {
             carSpeedEnum = CarSpeedEnum.Slow;
         }
