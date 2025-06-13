@@ -185,7 +185,7 @@ public class MyCarController : MonoBehaviour
             {
                 if (currentSpeed >= 1)
                 {
-                    currentSpeed += moveInput * 2 * (maxSpeed/2) * Time.deltaTime;
+                    currentSpeed += moveInput * 2 * (maxSpeed / 2) * Time.deltaTime;
                     isBrakeing = true;
                     isReverse = false;
                     MyGameController.instance.MySoundManager.BreakSound(true);
@@ -632,12 +632,13 @@ public class MyCarController : MonoBehaviour
         }
         else if (currentSpeed > 25 && currentSpeed <= 68)
         {
-            carSpeedEnum = CarSpeedEnum.Fast;            
+            carSpeedEnum = CarSpeedEnum.Fast;
         }
         else if (currentSpeed > 68)
         {
-            carSpeedEnum = CarSpeedEnum.SuperFast;            
+            carSpeedEnum = CarSpeedEnum.SuperFast;
         }
+        TimerOfCarSupperSpeed();
         MyGameController.instance.MyManager.HighSpeedEffect(true);
     }
 
@@ -661,5 +662,23 @@ public class MyCarController : MonoBehaviour
         }
 
         return carSpeedStatus;
+    }
+
+    float timerOfCarSupperSpeed = 0f;
+    public void TimerOfCarSupperSpeed()
+    {
+        if (carSpeedEnum == CarSpeedEnum.SuperFast)
+        {
+            timerOfCarSupperSpeed += Time.deltaTime;
+            if (timerOfCarSupperSpeed > 5f)
+            {
+                timerOfCarSupperSpeed = 0f;
+                MyGameController.instance.MySoundManager.PlayCarSuperSpeedFEELFOMOSound();
+            }
+        }
+        else
+        {
+            timerOfCarSupperSpeed = 0f;
+        }
     }
 }
