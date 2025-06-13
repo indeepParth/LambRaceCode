@@ -137,36 +137,23 @@ public class MyCarController : MonoBehaviour
     {
         if (!MyGameController.instance.isGameStart)
             return;
-        //HandleMovement();        
-        //HandleBoost();
-        //UpdateWheelPoses();
-        //DetectSurface();
+
         OilSpillEffect();
         float turnInput = Input.GetAxis("Horizontal");
         foreach (var wheel in frontWheelTransforms)
         {
-            //Quaternion deltaRotation = Quaternion.Euler(0, turnInput * maxTurnAngle * turnSpeed, 0);
             Vector3 toV3 = new Vector3(0, turnInput * maxTurnAngle, 0);
             wheel.localEulerAngles = Vector3.Lerp(wheel.localEulerAngles, toV3, turnSpeed * Time.deltaTime);
         }
-        float moveInput = Input.GetAxis("Vertical");
         if (currentSpeed > 2.01f || currentSpeed < -2.01f)
         {
             HandleSteering();
-            // MyGameController.instance.MySoundManager.EngineSound(true);
             UpdateDriverAnimator(true);
         }
         else
         {
-            // MyGameController.instance.MySoundManager.EngineSound(false);
             UpdateDriverAnimator(false);
         }
-        //MyGameController.instance.MySoundManager.EngineSound(moveInput != 0 ? true : false);
-
-        //if (Input.GetKey(KeyCode.Space) && moveInput == 0 && !isDrifting && !isBoosting)
-        //{
-        //    currentSpeed *= brakeFactor;
-        //}
     }
 
     public void StopCarInPickupDropArea()
@@ -191,8 +178,6 @@ public class MyCarController : MonoBehaviour
                 currentSpeed += moveInput * acceleration * Time.deltaTime;
                 isBrakeing = false;
                 isReverse = false;
-                //if (currentSpeed >= -1)
-                //OnReverseUpdateCarChildPosition();
                 MyGameController.instance.MySoundManager.EngineSound(true);
                 MyGameController.instance.MySoundManager.BreakSound(false);
             }
@@ -203,8 +188,6 @@ public class MyCarController : MonoBehaviour
                     currentSpeed += moveInput * 2 * (maxSpeed/2) * Time.deltaTime;
                     isBrakeing = true;
                     isReverse = false;
-                    //OnReverseUpdateCarChildPosition();
-                    // MyGameController.instance.MySoundManager.EngineSound(false);
                     MyGameController.instance.MySoundManager.BreakSound(true);
                 }
                 else
@@ -212,8 +195,6 @@ public class MyCarController : MonoBehaviour
                     currentSpeed += moveInput * 1f * acceleration * Time.deltaTime;
                     isBrakeing = false;
                     isReverse = true;
-                    //if (!blockControl && currentSpeed <= -1)
-                    //OnReverseUpdateCarChildPosition();
                     MyGameController.instance.MySoundManager.EngineSound(true);
                     MyGameController.instance.MySoundManager.BreakSound(false);
                 }
@@ -221,35 +202,17 @@ public class MyCarController : MonoBehaviour
             }
             currentSpeed = Mathf.Clamp(currentSpeed, -maxSpeed * 1f, maxSpeed);
         }
-        else if (!isBoosting)
+        else if (!isBoosting && isGrounded)
         {
             currentSpeed = Mathf.Lerp(currentSpeed, 0, deceleration * Time.deltaTime);
             isBrakeing = false;
-            // MyGameController.instance.MySoundManager.EngineSound(false);
             MyGameController.instance.MySoundManager.BreakSound(false);
         }
-
-        /*if (currentSpeed > 7.01f || currentSpeed < -7.01f)
-        {
-            HandleSteering();
-            MyGameController.instance.MySoundManager.EngineSound(true);
-        }
-        else
-        {
-            MyGameController.instance.MySoundManager.EngineSound(false);
-        }
-        //MyGameController.instance.MySoundManager.EngineSound(moveInput != 0 ? true : false);
-
-        if (Input.GetKey(KeyCode.Space) && moveInput == 0 && !isDrifting && !isBoosting)
-        {
-            currentSpeed *= brakeFactor;
-        }*/
 
         Vector3 forward = transform.forward * currentSpeed * Time.deltaTime;
         if (jumpEffect)
         {
             forward = (transform.forward + (transform.up * jumpYFactor)) * currentSpeed * Time.deltaTime;
-            // forward = new Vector3( 0, jumpYFactor * currentSpeed * Time.deltaTime, currentSpeed * Time.deltaTime);
             Debug.Log("jump UP = " + isGrounded);
         }
         else
@@ -262,12 +225,9 @@ public class MyCarController : MonoBehaviour
             else
             {
                 forward = transform.forward * currentSpeed * Time.deltaTime;
-                // Debug.Log("Forward");
             }
         }
         SetCarSpeedEnum(currentSpeed);
-        //transform.position += forward;
-        // myRigidbody.MovePosition(transform.position + forward);
         myRigidbody.AddForce(forward * forceCar, ForceMode.Impulse);
     }
 
@@ -281,7 +241,6 @@ public class MyCarController : MonoBehaviour
         else if (enableOilSpillEffect)
         {
             turnInput = oilSlipFactor;
-            // turnInput = Mathf.Clamp(turnInput, -1, 1);
         }
 
         // Handle drifting
@@ -320,9 +279,7 @@ public class MyCarController : MonoBehaviour
 
         if (turnInput != 0)
         {
-            //transform.Rotate(0, currentTurnAngle, 0);
             Quaternion deltaRotation = Quaternion.Euler(0, currentTurnAngle * Time.fixedDeltaTime, 0);
-            // myRigidbody.MoveRotation(myRigidbody.rotation * deltaRotation);
             myRigidbody.rotation = myRigidbody.rotation * deltaRotation;
         }
     }
@@ -348,15 +305,15 @@ public class MyCarController : MonoBehaviour
             }
             MyGameController.instance.MyManager.OnBoostNitroEnableSpeedEffect();
             carVFX.UpdateBoost(isBoosting);
-            // MyGameController.instance.MySoundManager.EngineSound(false);
             MyGameController.instance.MySoundManager.BreakSound(false);
         }
 
         // Reset speed after boost duration
         if (isBoosting && Time.time > boostEndTime && boostEndTime != 0)
         {
-            maxSpeed /= boostMultiplier;
-            currentSpeed = maxSpeed;
+            float maxSp = carSpeedStatusSuperFast.maxSpeed;
+            maxSp /= boostMultiplier;
+            currentSpeed = maxSp;
             boostEndTime = 0;
             isBoosting = false;
             MyGameController.instance.MyManager.DisableSpeedEffect();
@@ -423,22 +380,6 @@ public class MyCarController : MonoBehaviour
         nextBoostTime = 0;
     }
 
-    // private void OnTriggerEnter(Collider other)
-    // {
-    //     // return;
-    //     // if (other.gameObject.CompareTag("carAI"))
-    //     // {
-    //     //     if (!isBoosting)
-    //     //     {
-    //     //         currentSpeed *= brakeFactor;
-    //     //     }
-    //     //     Vector3 dir = other.transform.position - transform.position;
-    //     //     Vector3 hitPoint = other.ClosestPoint(other.transform.position);
-    //     //     hitPoint.y += 1;
-    //     //     other.gameObject.GetComponent<AITrafficCar>().HideAfterAccident(dir, hitPoint);
-    //     // }
-    // }
-
     private Collision lastColisionCar;
     private void OnCollisionEnter(Collision collision)
     {
@@ -453,9 +394,6 @@ public class MyCarController : MonoBehaviour
                 }
             }
 
-            //Vector3 hitPoint = collision.GetContact(0).point;
-            //Vector3 dir = hitPoint - transform.position;
-            //collision.gameObject.GetComponent<AITrafficCar>().HideAfterAccident(dir, hitPoint);
             lastColisionCar = collision;
             CancelInvoke("CarCrashSoundAfterHitSameCar");
             Invoke("CarCrashSoundAfterHitSameCar", 3f);
@@ -473,24 +411,12 @@ public class MyCarController : MonoBehaviour
         else if (collision.gameObject.CompareTag("jump_Platform"))
         {
             JumpEffectStart();
-            // Quaternion deltaRotation = Quaternion.Euler(60, 0, 0); propOnRoad
-            // myRigidbody.rotation = myRigidbody.rotation * deltaRotation;
         }
     }
     void CarCrashSoundAfterHitSameCar()
     {
         lastColisionCar = null;
     }
-
-    // void OnCollisionExit(Collision collision)
-    // {
-    //     if (collision.gameObject.CompareTag("jump_Platform"))
-    //     {
-
-    //         // Quaternion deltaRotation = Quaternion.Euler(0, 0, 0);
-    //         // myRigidbody.rotation = myRigidbody.rotation * deltaRotation;
-    //     }
-    // }
 
     bool carChildPivotBack = false;
     public void OnReverseUpdateCarChildPosition(bool _isReverse)
@@ -601,10 +527,10 @@ public class MyCarController : MonoBehaviour
         {
             jumpEffect = true;
             isBoosting = true;
-            float maxSp = carSpeedStatusSuperFast.maxSpeed;
-            maxSp *= boostMultiplier; // Apply boost multiplier to max speed
+            // float maxSp = carSpeedStatusSuperFast.maxSpeed;
+            // maxSp *= boostMultiplier; // Apply boost multiplier to max speed
             // maxSpeed *= boostMultiplier;
-            currentSpeed = maxSp; // Apply boost
+            currentSpeed = carSpeedStatusSuperFast.maxSpeed; // Apply boost
             boostEndTime = Time.time + boostDuration; // Set the end time for the boost            
             MyGameController.instance.MyManager.OnBoostNitroEnableSpeedEffect();
             carVFX.UpdateBoost(isBoosting);
@@ -619,8 +545,9 @@ public class MyCarController : MonoBehaviour
         if (isBoosting && Time.time > boostEndTime && boostEndTime != 0)
         {
             jumpEffect = false;
-            maxSpeed /= boostMultiplier;
-            currentSpeed = maxSpeed;
+            // float maxSp = carSpeedStatusSuperFast.maxSpeed;
+            // maxSp /= boostMultiplier;
+            currentSpeed = carSpeedStatusSuperFast.maxSpeed;
             boostEndTime = 0;
             isBoosting = false;
             MyGameController.instance.MyManager.DisableSpeedEffect();
@@ -691,8 +618,6 @@ public class MyCarController : MonoBehaviour
 
     public void SetCarSpeedEnum(float carSpeed)
     {
-        // int speed = SpeedInHour.ToInt();
-
         if (currentSpeed < 0)
         {
             carSpeedEnum = CarSpeedEnum.Slow;
