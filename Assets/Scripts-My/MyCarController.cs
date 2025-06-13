@@ -664,20 +664,26 @@ public class MyCarController : MonoBehaviour
         return carSpeedStatus;
     }
 
+    bool feelTheFOMOOOO = false;
     float timerOfCarSupperSpeed = 0f;
     public void TimerOfCarSupperSpeed()
     {
         if (carSpeedEnum == CarSpeedEnum.SuperFast)
         {
-            timerOfCarSupperSpeed += Time.deltaTime;
-            if (timerOfCarSupperSpeed > 5f)
+            if (feelTheFOMOOOO)
             {
-                timerOfCarSupperSpeed = 0f;
-                MyGameController.instance.MySoundManager.PlayCarSuperSpeedFEELFOMOSound();
+                timerOfCarSupperSpeed += Time.deltaTime;
+                if (timerOfCarSupperSpeed > 5f)
+                {
+                    feelTheFOMOOOO = false;
+                    timerOfCarSupperSpeed = 0f;
+                    MyGameController.instance.MySoundManager.PlayCarSuperSpeedFEELFOMOSound();
+                }
             }
         }
         else
         {
+            feelTheFOMOOOO = true;
             timerOfCarSupperSpeed = 0f;
         }
     }
